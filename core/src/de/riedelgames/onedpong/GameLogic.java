@@ -13,8 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameLogic implements InputProcessor{
 	
-	private static Player leftPlayer;
-	private static Player rightPlayer;
+	public static Player leftPlayer;
+	public static Player rightPlayer;
 	
 	public static Ball ball;
 	private static ParticleEffect loseEffect;
@@ -27,6 +27,7 @@ public class GameLogic implements InputProcessor{
 	private static DeadlineMod deadlineMod;
 	private static int rallyLength = 0;
 	
+
 	private static Properties gameSettings;
 	private static float deadlineConstantDecreaseValue;
 	private static float velocityConstantIncreaseValue;
@@ -84,7 +85,7 @@ public class GameLogic implements InputProcessor{
 			else {
 				respondToPlayerInput(); // also increases rally length 
 				if(tempRallyLength != rallyLength){
-					velocityLogic();
+					//velocityLogic();
 					if(rallyLength != 0 && rallyLength % 2 == 0){
 						deadlineLogic();
 					}
@@ -183,7 +184,7 @@ public class GameLogic implements InputProcessor{
 	private static boolean checkForPlayerMistake(){
 		if(ballAtEnd()){
 			//Gdx.app.log("PlayerError", "Ball at End");
-			return false;
+			return true;
 		}
 		else if(playerPressedToEarly()){
 			//Gdx.app.log("PlayerError", "One Player pressed to early");
@@ -197,7 +198,7 @@ public class GameLogic implements InputProcessor{
 	}
 	
 	private static boolean ballAtEnd(){
-		if(ball.getX() == 0 || ball.getX() == GameScreen.GAME_WORLD_WIDTH - ball.getWidth()) return true;
+		if(ball.getX() == -ball.getWidth() || ball.getX() == GameScreen.GAME_WORLD_WIDTH) return true;
 		else return false;
 	}
 	
@@ -209,11 +210,13 @@ public class GameLogic implements InputProcessor{
 	
 	private static void respondToPlayerInput(){
 		if (ball.getVelX() < 0 && leftPlayer.isKeyDown()){
-			ball.setVelX(ball.getVelX() * -1);
+			velocityLogic();
+			//ball.setVelX(ball.getVelX() * -1);
 			rallyLength++;
 		}
 		else if (ball.getVelX() > 0 && rightPlayer.isKeyDown()){
-			ball.setVelX(ball.getVelX() * -1);
+			velocityLogic();
+			//ball.setVelX(ball.getVelX() * -1);
 			rallyLength++;
 		}
 	}
@@ -228,21 +231,36 @@ public class GameLogic implements InputProcessor{
 	
 	public static void velocityLogic(){
 		if(velocityMod == VelocityMod.constantIncrease){
-			ball.setVelX((Math.abs(ball.getVelX()) + (velocityConstantIncreaseValue)) * Math.signum(ball.getVelX()));
+			ball.setVelX((Math.abs(ball.getVelX()) + (velocityConstantIncreaseValue)) * Math.signum(ball.getVelX() * -1));
 		}
 		else if(velocityMod == VelocityMod.parabolicHitPoint){
-			if(ball.getVelX() >= 0){
-			    float b = 8f / 3f * (velocityParabolicHitpointMax - velocityParabolicHitpointMin);
-			    float a =  - b / 2;
-			    float x = (ball.getX() + ball.getWidth()) / leftDeadline;
-			    float velX = a * x * x + b * x + velocityParabolicHitpointMin;
+			if(ball.getVelX() <= 0){
+				float max = velocityParabolicHitpointMax;
+				float min = velocityParabolicHitpointMin;
+				float k = leftDeadline;
+				float d = ball.getWidth();
+				float a = -((4*(max - min))/(d + k)/(d + k));
+				float b = -((4*(d - k)*(max - min))/(d + k)/(d + k));
+				float c = (4*d*k*(max - min))/(d + k)/(d + k) + min;
+			    float x = (ball.getX());
+			    float velX = a*x*x+b*x+c;
 			    ball.setVelX(velX);
+			    Gdx.app.log("a", a + " b " + b + " c " +c);
+			    Gdx.app.log("Ball: ", "X= " + x + " velX<== " + -velX + " " + leftDeadline);
 			} else {
-			    float b = 8f / 3f * (velocityParabolicHitpointMax - velocityParabolicHitpointMin);
-                float a =  - b / 2;
-                float x =  (GameScreen.GAME_WORLD_WIDTH - (ball.getX() + ball.getWidth())) / leftDeadline;
-                float velX = a * x * x + b * x + velocityParabolicHitpointMin;
-                ball.setVelX(-velX);
+				float max = velocityParabolicHitpointMax;
+				float min = velocityParabolicHitpointMin;
+				float k = leftDeadline;
+				float d = ball.getWidth();
+				float a = -((4*(max - min))/(d + k)/(d + k));
+				float b = -((4*(d - k)*(max - min))/(d + k)/(d + k));
+				float c = (4*d*k*(max - min))/(d + k)/(d + k) + min;
+			    float x = (GameScreen.GAME_WORLD_WIDTH - ball.getX())-ball.getWidth();
+			    float velX = a*x*x+b*x+c;
+			    ball.setVelX(-velX);
+			    Gdx.app.log("a", a + " b " + b + " c " +c);
+			    Gdx.app.log("Ball: ", "X= " + x + " velX= " + -velX + " " + leftDeadline);
+
 			}
 		}
 	}
@@ -337,6 +355,10 @@ public class GameLogic implements InputProcessor{
 	private static BufferedInputStream openFileStream(String Path) throws FileNotFoundException{
 		BufferedInputStream stream = new BufferedInputStream(Gdx.files.internal(Path).read());
 		return stream;
+	}
+	
+	public static int getRallyLength() {
+		return rallyLength;
 	}
 	
 }

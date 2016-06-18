@@ -25,7 +25,7 @@ public class Ball extends GameObject{
 	
 	public Ball() {
 		super(0, 0, 0, 0);
-		width = GameScreen.GAME_WORLD_WIDTH / 22;
+		width = GameScreen.GAME_WORLD_WIDTH / 35;
 		height = width;
 		
 		sprite = new Sprite(new Texture("lightcircle.png"));
@@ -139,12 +139,12 @@ public class Ball extends GameObject{
 	
 	
 	private boolean checkForMapEnd(){
-		if(this.x > GameScreen.GAME_WORLD_WIDTH - sprite.getWidth()){
-			x = GameScreen.GAME_WORLD_WIDTH - sprite.getWidth();
+		if(this.x > GameScreen.GAME_WORLD_WIDTH){
+			//x = GameScreen.GAME_WORLD_WIDTH;
 			return true;
 		}
-		else if(this.x < 0 ){
-			x = 0;
+		else if(this.x < -sprite.getWidth() ){
+			//x = sprite.getWidth();
 			return true;
 		}
 		else if(this.y < 0 || this.y > GameScreen.GAME_WORLD_HEIGHT - sprite.getHeight()){
@@ -161,14 +161,14 @@ public class Ball extends GameObject{
 	}
 	
 	private void clampToWorld(){
-		if(this.x > GameScreen.GAME_WORLD_WIDTH - sprite.getWidth()){
-			x = GameScreen.GAME_WORLD_WIDTH - sprite.getWidth();
+		if(this.x > GameScreen.GAME_WORLD_WIDTH){
+			x = GameScreen.GAME_WORLD_WIDTH;
 		}
-		else if(this.x < 0 ){
-			x = 0;
+		else if(this.x + sprite.getWidth() < 0 ){
+			x = -sprite.getWidth();
 		}
-		else if(this.y < 0 || this.y > GameScreen.GAME_WORLD_HEIGHT - sprite.getHeight()){
-			y = GameScreen.GAME_WORLD_HEIGHT - sprite.getHeight();
+		else if(this.y < 0 || this.y > GameScreen.GAME_WORLD_HEIGHT + sprite.getHeight()){
+			y = GameScreen.GAME_WORLD_HEIGHT + sprite.getHeight();
 		}
 		else if(this.y < 0){
 			y = 0;

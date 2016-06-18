@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import Network.NetworkHandler;
 
 public class GameScreen implements Screen {
 	
@@ -21,6 +25,8 @@ public class GameScreen implements Screen {
 	// private Viewport viewport;
 	private OrthographicCamera camera;
 	private Sprite background;
+	
+	private Hud hud;
 	
 	
 	public GameScreen(OneDPong game){
@@ -38,7 +44,11 @@ public class GameScreen implements Screen {
 		//viewport = new ScreenViewport(camera);
 		//viewport = new FitViewport(camera.viewportWidth, camera.viewportHeight, camera);
 		
+		hud = new Hud(game);
+		
 		GameLogic.setGameRunning(true);
+		
+		
 	}
 	
 
@@ -55,8 +65,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
+		
 		camera.update();
 		GameLogic.update(delta);
+		hud.update();
 		
 		game.batch.setProjectionMatrix(camera.combined);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -66,6 +78,7 @@ public class GameScreen implements Screen {
 		background.draw(game.batch);
 		GameLogic.draw(game.batch);
 		game.batch.end();
+		hud.draw();
 
 	}
 
@@ -76,6 +89,7 @@ public class GameScreen implements Screen {
 		camera.viewportWidth = GAME_WORLD_WIDTH;
 		camera.viewportHeight = GAME_WORLD_HEIGHT * width/height;
 		camera.update();
+		hud.getViewport().update(width, height);
 		
 	}
 
@@ -100,6 +114,8 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		GameLogic.dispose();
+		background.getTexture().dispose();
+		hud.dispose();
 	}
 	
 	

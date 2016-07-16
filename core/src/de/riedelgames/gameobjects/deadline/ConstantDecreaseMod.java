@@ -17,9 +17,9 @@ public class ConstantDecreaseMod implements DeadlineMod{
 	@Override
 	public void update(GameStatus gameStatus) {
 		if (deadline.getDirection() > 0) {
-			deadline.setX(deadline.getX() + gameStatus.getGameSettings().getConstantDecreaseValue());
+			deadline.setX(deadline.getX() + gameStatus.getGameSettings().getDeadlineConstantDecreaseValue());
 		} else if (deadline.getDirection() < 0) {
-			deadline.setX(deadline.getX() - gameStatus.getGameSettings().getConstantDecreaseValue());
+			deadline.setX(deadline.getX() - gameStatus.getGameSettings().getDeadlineConstantDecreaseValue());
 		}
 	}
 

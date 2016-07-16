@@ -17,7 +17,7 @@ public class GameSettings {
 	
 	/** Deadline Settings */
 	private DeadlineType deadlineType;
-	private float constantDecreaseValue;
+	private float deadlineConstantDecreaseValue;
 	private float hitAreaSize;
 	
 	/** VelocityMod Settings */
@@ -31,13 +31,16 @@ public class GameSettings {
 	public GameSettings(int i) {
 		setWindowWidth(640);
 		setWindowHeight(480);
-		setFullScreenMod(false);
+		setFullScreenMod(true);
 		pointsToBePlayed = 5;
-		deadlineType = DeadlineType.constant;
-		velocityMod = VelocityMod.constantIncrease;
+		deadlineType = DeadlineType.constantDecrease;
+		velocityMod = VelocityMod.parabolicHitPoint;
+		deadlineConstantDecreaseValue = 0.01f;
 		velocityConstantIncreaseValue = 0.1f;
 		setBallStartVelocity(1.0f);
-		setHitAreaSize(0.125f);
+		setHitAreaSize(0.4f);
+		velocityParabolicHitpointMin = 0.1f;
+		velocityParabolicHitpointMax = 5.0f;
 	}
 	
 	
@@ -90,8 +93,8 @@ public class GameSettings {
 
 
 
-	public float getConstantDecreaseValue() {
-		return constantDecreaseValue;
+	public float getDeadlineConstantDecreaseValue() {
+		return deadlineConstantDecreaseValue;
 	}
 
 

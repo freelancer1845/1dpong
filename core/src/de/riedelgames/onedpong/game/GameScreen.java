@@ -63,6 +63,7 @@ public class GameScreen implements Screen,InputProcessor {
 		gameStatus.setLeftDeadline(new Deadline(gameSettings.getHitAreaSize(), GameConstants.GAME_WORLD_HEIGHT / 2, 0.01f, 0.5f, DeadlineType.constant, -1));
 		gameStatus.setRightDeadline(new Deadline(GameConstants.GAME_WORLD_WIDTH - gameSettings.getHitAreaSize(), GameConstants.GAME_WORLD_HEIGHT / 2, 0.01f, 0.5f, DeadlineType.constant, 1));
 		gameStatus.setBall(new Ball());
+		gameStatus.getBall().setY(GameConstants.GAME_WORLD_HEIGHT / 2 - gameStatus.getBall().getWidth() / 2);
 		this.gameSettings = gameSettings;
 		gameStatus.setGameSettings(gameSettings);
 		rallyLogic = RallyLogicImpl.getInstance();
@@ -103,6 +104,7 @@ public class GameScreen implements Screen,InputProcessor {
 			game.batch.begin();
 			background.draw(game.batch);
 			gameStatus.draw(game.batch);
+			rallyProcessor.draw(game.batch);
 			game.batch.end();
 			hud.draw();
 		} catch (RallyException e) {
@@ -156,6 +158,8 @@ public class GameScreen implements Screen,InputProcessor {
 		} else if (keycode == Input.Keys.D) {
 			gameStatus.getRightPlayer().setKeyDown();
 			return true;
+		} else if (keycode == Input.Keys.ESCAPE) {
+			Gdx.app.exit();
 		}
 		return false;
 	}

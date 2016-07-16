@@ -2,7 +2,9 @@ package de.riedelgames.game.rallyprocessing;
 
 import java.util.EnumSet;
 
-import de.riedelgames.game.rallylogic.RallyLogic;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import de.riedelgames.game.rallylogic.RallyLogicImpl;
 import de.riedelgames.game.rallylogic.RallyStatus;
 import de.riedelgames.onedpong.game.GameStatus;
@@ -14,6 +16,8 @@ public class RallyProcessorImpl implements RallyProcessor{
 	private static EnumSet<RallyProcessStatus> rallyProcessStatusSet;
 	
 	private static RallyProcessorImpl instance = null;
+	
+	private ParticleEffect loseEffect = null;
 	
 	public static RallyProcessor getInstance() {
 		if (instance == null) {
@@ -36,15 +40,13 @@ public class RallyProcessorImpl implements RallyProcessor{
 			if (rallyProcessStatusSet.contains(RallyProcessStatus.PLAYING_LOSE_ANIMATION)) {
 				playLoseAnimation(gameStatus, deltaTime);
 			}
-			if (rallyProcessStatusSet.contains(RallyProcessStatus.SETTING_UP_RALLY)) {
+			else if (rallyProcessStatusSet.contains(RallyProcessStatus.SETTING_UP_RALLY)) {
 				setUpRally(gameStatus);
 			}
-			if (rallyProcessStatusSet.contains(RallyProcessStatus.UPDATING_INFORMATION)) {
+			else if (rallyProcessStatusSet.contains(RallyProcessStatus.UPDATING_INFORMATION)) {
 				updateInformation(gameStatus);
 			}
-			if (!rallyProcessStatusSet.contains(RallyProcessStatus.PLAYING_LOSE_ANIMATION)
-				&& !rallyProcessStatusSet.contains(RallyProcessStatus.SETTING_UP_RALLY)
-				&& !rallyProcessStatusSet.contains(RallyProcessStatus.UPDATING_INFORMATION)) {
+			else {
 				rallyProcessStatusSet.add(RallyProcessStatus.WAITING_FOR_RALLY);
 				rallyProcessStatusSet.add(RallyProcessStatus.SETTING_UP_RALLY);
 				rallyProcessStatusSet.add(RallyProcessStatus.PLAYING_LOSE_ANIMATION);
@@ -61,7 +63,7 @@ public class RallyProcessorImpl implements RallyProcessor{
 			gameStatus.getBall().setX(gameStatus.getRightDeadline().getX());
 		} else if (rallyStatusSet.contains(RallyStatus.RIGHT_PLAYER_WON)) {
 			rallyStatusSet.add(RallyStatus.LEFT_PLAYER_SERVE);
-			gameStatus.getBall().setX(gameStatus.getLeftDeadline().getX());
+			gameStatus.getBall().setX(gameStatus.getLeftDeadline().getX() - gameStatus.getBall().getWidth());
 		}
 		rallyProcessStatusSet.remove(RallyProcessStatus.SETTING_UP_RALLY);
 	}
@@ -79,13 +81,30 @@ public class RallyProcessorImpl implements RallyProcessor{
 	}
 	
 	private void playLoseAnimation(GameStatus gameStatus, float deltaTime) {
-		rallyProcessStatusSet.remove(RallyProcessStatus.PLAYING_LOSE_ANIMATION);
+		if (loseEffect == null) {
+			loseEffect = new LoseEffect(gameStatus.getBall().getX(), gameStatus.getBall().getY());
+		}
+		loseEffect.update(deltaTime);
+		if (loseEffect.isComplete()) {
+			rallyProcessStatusSet.remove(RallyProcessStatus.PLAYING_LOSE_ANIMATION);
+			loseEffect.dispose();
+			loseEffect = null;
+		}
 	}
 
+	@Override
+	public void draw(SpriteBatch batch) {
+		if (loseEffect != null) {
+			loseEffect.draw(batch);
+		}
+	}
 
 	@Override
 	public EnumSet<RallyProcessStatus> getRallyProcessStatusSet() {
 		return rallyProcessStatusSet;
 	}
+
+
+	
 
 }

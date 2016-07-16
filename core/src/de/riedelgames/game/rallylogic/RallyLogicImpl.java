@@ -86,7 +86,7 @@ public class RallyLogicImpl implements RallyLogic {
 		/** right Player */
 		else {
 			if (gameStatus.getRightPlayer().isKeyDown()
-				&& gameStatus.getBall().getX() < gameStatus.getRightDeadline().getX()) {
+				&& gameStatus.getBall().getX() + gameStatus.getBall().getWidth() < gameStatus.getRightDeadline().getX()) {
 				rallyStatusSet.add(RallyStatus.LEFT_PLAYER_WON);
 				rallyStatusSet.add(RallyStatus.RALLY_STOPPED);
 				rallyStatusSet.remove(RallyStatus.RALLY_RUNNING);
@@ -146,7 +146,7 @@ public class RallyLogicImpl implements RallyLogic {
 			serveStarted = true;
 		} else {
 			double currentTime = System.nanoTime() / 1000000000;
-			if (currentTime - serveStartTime > 3) {
+			if (currentTime - serveStartTime > 2) {
 				if (player.isKeyDown()) {
 					if (rallyStatusSet.contains(RallyStatus.LEFT_PLAYER_SERVE)) {
 						gameStatus.getBall().setVelX(gameStatus.getGameSettings().getBallStartVelocity());

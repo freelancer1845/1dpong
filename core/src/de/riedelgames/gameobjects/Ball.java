@@ -85,7 +85,7 @@ public class Ball extends GameObject{
 		this.y += velY * deltaTime;
 		
 		if(checkForMapEnd()){
-			clampToWorld();
+			// clampToWorld();
 			sprite.setColor(1, 0.6f, 0.6f, 1);
 		}
 		

@@ -1,4 +1,4 @@
-package de.riedelgames.onedpong;
+package de.riedelgames.onedpong.game.velocity;
 
 public enum VelocityMod {
 	constant,

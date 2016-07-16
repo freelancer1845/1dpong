@@ -101,4 +101,13 @@ public class NetworkHandler implements Runnable {
 		}
 	}
 	
+	public void dispose() {
+		try {
+			this.serverSocket.close();
+		} catch (IOException e) {
+			Gdx.app.log("Network Handler: ", "Error closing the socket (already closed?");
+			e.printStackTrace();
+		}
+	}
+	
 }

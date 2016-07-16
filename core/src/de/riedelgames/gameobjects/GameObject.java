@@ -1,4 +1,4 @@
-package de.riedelgames.onedpong;
+package de.riedelgames.gameobjects;
 
 public abstract class GameObject {
 	

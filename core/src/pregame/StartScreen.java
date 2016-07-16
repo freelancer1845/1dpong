@@ -1,6 +1,5 @@
 package pregame;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,9 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Network.NetworkHandler;
-import de.riedelgames.onedpong.GameLogic;
 import de.riedelgames.onedpong.OneDPong;
-import de.riedelgames.onedpong.Player;
 
 public class StartScreen implements Screen {
 

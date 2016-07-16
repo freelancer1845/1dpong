@@ -1,4 +1,4 @@
-package de.riedelgames.onedpong;
+package de.riedelgames.gameobjects;
 
 import java.util.Random;
 
@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+
+import de.riedelgames.onedpong.game.GameConstants;
+import de.riedelgames.onedpong.game.GameScreen;
+import de.riedelgames.onedpong.game.settings.GameSettings;
 
 
 public class Ball extends GameObject{
@@ -25,7 +29,7 @@ public class Ball extends GameObject{
 	
 	public Ball() {
 		super(0, 0, 0, 0);
-		width = GameScreen.GAME_WORLD_WIDTH / 35;
+		width = GameConstants.GAME_WORLD_WIDTH / 35;
 		height = width;
 		
 		sprite = new Sprite(new Texture("lightcircle.png"));
@@ -49,7 +53,7 @@ public class Ball extends GameObject{
 	
 	public Ball(float x, float y) {
 		super(x, y, 0, 0);
-		width = GameScreen.GAME_WORLD_WIDTH / 22;
+		width = GameConstants.GAME_WORLD_WIDTH / 22;
 		height = width;
 		
 		sprite = new Sprite(new Texture("lightcircle.png"));
@@ -94,11 +98,7 @@ public class Ball extends GameObject{
 	
 	public void draw(SpriteBatch batch){
 		sprite.draw(batch);
-		if(velX != 0){
-			pe.draw(batch);
-		}
-		
-		
+		pe.draw(batch);
 	}
 	
 	public void dispose(){
@@ -139,7 +139,7 @@ public class Ball extends GameObject{
 	
 	
 	private boolean checkForMapEnd(){
-		if(this.x > GameScreen.GAME_WORLD_WIDTH){
+		if(this.x > GameConstants.GAME_WORLD_WIDTH){
 			//x = GameScreen.GAME_WORLD_WIDTH;
 			return true;
 		}
@@ -147,8 +147,8 @@ public class Ball extends GameObject{
 			//x = sprite.getWidth();
 			return true;
 		}
-		else if(this.y < 0 || this.y > GameScreen.GAME_WORLD_HEIGHT - sprite.getHeight()){
-			y = GameScreen.GAME_WORLD_HEIGHT - sprite.getHeight();
+		else if(this.y < 0 || this.y > GameConstants.GAME_WORLD_HEIGHT - sprite.getHeight()){
+			y = GameConstants.GAME_WORLD_HEIGHT - sprite.getHeight();
 			return true;
 		}
 		else if(this.y < 0){
@@ -161,14 +161,14 @@ public class Ball extends GameObject{
 	}
 	
 	private void clampToWorld(){
-		if(this.x > GameScreen.GAME_WORLD_WIDTH){
-			x = GameScreen.GAME_WORLD_WIDTH;
+		if(this.x > GameConstants.GAME_WORLD_WIDTH){
+			x = GameConstants.GAME_WORLD_WIDTH;
 		}
 		else if(this.x + sprite.getWidth() < 0 ){
 			x = -sprite.getWidth();
 		}
-		else if(this.y < 0 || this.y > GameScreen.GAME_WORLD_HEIGHT + sprite.getHeight()){
-			y = GameScreen.GAME_WORLD_HEIGHT + sprite.getHeight();
+		else if(this.y < 0 || this.y > GameConstants.GAME_WORLD_HEIGHT + sprite.getHeight()){
+			y = GameConstants.GAME_WORLD_HEIGHT + sprite.getHeight();
 		}
 		else if(this.y < 0){
 			y = 0;

@@ -72,7 +72,7 @@ public class RallyProcessorImpl implements RallyProcessor{
 		if (rallyStatusSet.contains(RallyStatus.LEFT_PLAYER_WON)) {
 			gameStatus.getLeftPlayer().setScore(gameStatus.getLeftPlayer().getScore() + 1);
 		} else if (rallyStatusSet.contains(RallyStatus.RIGHT_PLAYER_WON)) {
-			gameStatus.getRightPlayer().setScore(gameStatus.getLeftPlayer().getScore() + 1);
+			gameStatus.getRightPlayer().setScore(gameStatus.getRightPlayer().getScore() + 1);
 		}
 		gameStatus.setRallyLength(0);
 		rallyStatusSet.remove(RallyStatus.LEFT_PLAYER_WON);

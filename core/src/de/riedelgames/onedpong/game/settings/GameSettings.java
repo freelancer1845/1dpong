@@ -37,10 +37,10 @@ public class GameSettings {
 		velocityMod = VelocityMod.parabolicHitPoint;
 		deadlineConstantDecreaseValue = 0.01f;
 		velocityConstantIncreaseValue = 0.1f;
-		setBallStartVelocity(1.0f);
-		setHitAreaSize(0.4f);
+		setBallStartVelocity(2.0f);
+		setHitAreaSize(0.3f);
 		velocityParabolicHitpointMin = 0.1f;
-		velocityParabolicHitpointMax = 5.0f;
+		velocityParabolicHitpointMax = 4.5f;
 	}
 	
 	

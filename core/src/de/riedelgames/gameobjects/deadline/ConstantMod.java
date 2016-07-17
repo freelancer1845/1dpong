@@ -8,7 +8,7 @@ public class ConstantMod implements DeadlineMod{
 	
 	@Override
 	public void update(GameStatus gameStatus) {
-
+		
 	}
 
 	@Override

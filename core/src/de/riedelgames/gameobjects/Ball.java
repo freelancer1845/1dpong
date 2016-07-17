@@ -12,8 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 import de.riedelgames.onedpong.game.GameConstants;
-import de.riedelgames.onedpong.game.GameScreen;
-import de.riedelgames.onedpong.game.settings.GameSettings;
 
 
 public class Ball extends GameObject{

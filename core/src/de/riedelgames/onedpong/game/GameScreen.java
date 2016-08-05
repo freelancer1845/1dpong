@@ -170,7 +170,7 @@ public class GameScreen implements Screen,InputProcessor {
 		if (keycode == Input.Keys.A) {
 			gameStatus.getLeftPlayer().unsetKeyDown();
 			return true;
-		} else if (keycode == Input.Keys.D) {
+		} else if (keycode == Input.Keys.L) {
 			gameStatus.getRightPlayer().unsetKeyDown();
 			return true;
 		}

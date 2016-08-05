@@ -26,7 +26,7 @@ public class GameSettingsPersistenceHandler {
 	
 	private static final String VELOCITY_MOD = "velocityMod";
 	
-	private static final String VELOCITY_CONSTANT_INCREASE_DEFAULT_VALUE = "1";
+	private static final String VELOCITY_CONSTANT_INCREASE_DEFAULT_VALUE = "0.2";
 	
 	private static final String VELOCITY_CONSTANT_INCREASE_VALUE = "velocityConstantIncreaseValue";
 	
@@ -54,7 +54,7 @@ public class GameSettingsPersistenceHandler {
 	
 	private static final String DEADLINE_CONSTANT_DECREASE_VALUE = "deadlineConstantDecreaseValue";
 	
-	private static final String RUN_IN_FULLSCREEN_DEFAULT = "false";
+	private static final String RUN_IN_FULLSCREEN_DEFAULT = "true";
 	
 	private static final String RUN_IN_FULLSCREEN = "runInFullscreen";
 	

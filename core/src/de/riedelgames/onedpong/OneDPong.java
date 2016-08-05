@@ -20,7 +20,7 @@ public class OneDPong extends Game	{
 	private NetworkHandler networkHandler;
 	
 	public static final Player leftPlayer = new Player(Input.Keys.A);
-	public static final Player rightPlayer = new Player(Input.Keys.D);
+	public static final Player rightPlayer = new Player(Input.Keys.L);
 	
 	public SpriteBatch batch;
 	
@@ -33,8 +33,8 @@ public class OneDPong extends Game	{
 		//Thread test = new Thread(networkHandler);
 		//test.start();
 		batch = new SpriteBatch();
-		this.setScreen(new GameScreen(this, GameSettingsPersistenceHandler.loadSettings()));
-		//this.setScreen(new GameScreen(this, new GameSettings(1)));
+		//this.setScreen(new GameScreen(this, GameSettingsPersistenceHandler.loadSettings()));
+		this.setScreen(new GameScreen(this, new GameSettings(1)));
 	}
 
 	@Override

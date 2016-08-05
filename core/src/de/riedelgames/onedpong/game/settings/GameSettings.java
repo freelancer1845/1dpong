@@ -33,16 +33,17 @@ public class GameSettings {
 	public GameSettings(int i) {
 		setWindowWidth(640);
 		setWindowHeight(480);
-		setFullScreenMod(true);
+		setFullScreenMod(false);
 		setPointsToBePlayed(5);
 		setDeadlineType(DeadlineType.constantDecrease);
-		velocityMod = VelocityMod.parabolicHitPoint;
+		velocityMod = VelocityMod.constantIncrease;
 		setDeadlineConstantDecreaseValue(0.01f);
 		velocityConstantIncreaseValue = 0.1f;
 		setBallStartVelocity(2.0f);
-		setHitAreaSize(0.3f);
+		setHitAreaSize(0.4f);
 		velocityParabolicHitpointMin = 0.1f;
 		velocityParabolicHitpointMax = 4.5f;
+		
 	}
 	
 	

@@ -32,7 +32,7 @@ public class OneDPong extends Game	{
 		//Thread test = new Thread(networkHandler);
 		//test.start();
 		batch = new SpriteBatch();
-		this.setScreen(new SettingsScreen(this));
+		this.setScreen(new StartScreen(this));
 		//this.setScreen(new GameScreen(this, new GameSettings(1)));
 	}
 

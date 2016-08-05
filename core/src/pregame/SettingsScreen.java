@@ -1,5 +1,8 @@
 package pregame;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +24,8 @@ public class SettingsScreen implements Screen {
 	
 	private final Stage stage;
 	private final Table rootTable;
+	
+	private final Map<String, String> settingsMap = new HashMap<String, String>();
 	
 	public SettingsScreen(OneDPong game){
 		this.game = game;

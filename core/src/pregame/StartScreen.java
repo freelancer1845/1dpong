@@ -1,5 +1,6 @@
 package pregame;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import Network.NetworkHandler;
 import de.riedelgames.onedpong.OneDPong;
+import de.riedelgames.onedpong.game.settings.GameSettings;
+import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
 
 public class StartScreen implements Screen {
 
@@ -57,6 +60,8 @@ public class StartScreen implements Screen {
 		rootTable.center().top();
 		stage.addActor(rootTable);
 		rootTable.setDebug(true);
+		
+		
 		
 		fillTable();
 

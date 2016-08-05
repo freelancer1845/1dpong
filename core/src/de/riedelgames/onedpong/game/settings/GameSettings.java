@@ -27,15 +27,17 @@ public class GameSettings {
 	private float velocityParabolicHitpointMin;
 	
 	
+	public GameSettings() {};
+	
 	/** dummy game settings */
 	public GameSettings(int i) {
 		setWindowWidth(640);
 		setWindowHeight(480);
 		setFullScreenMod(true);
-		pointsToBePlayed = 5;
-		deadlineType = DeadlineType.constantDecrease;
+		setPointsToBePlayed(5);
+		setDeadlineType(DeadlineType.constantDecrease);
 		velocityMod = VelocityMod.parabolicHitPoint;
-		deadlineConstantDecreaseValue = 0.01f;
+		setDeadlineConstantDecreaseValue(0.01f);
 		velocityConstantIncreaseValue = 0.1f;
 		setBallStartVelocity(2.0f);
 		setHitAreaSize(0.3f);
@@ -92,25 +94,6 @@ public class GameSettings {
 	}
 
 
-
-	public float getDeadlineConstantDecreaseValue() {
-		return deadlineConstantDecreaseValue;
-	}
-
-
-
-	public float getHitAreaSize() {
-		return hitAreaSize;
-	}
-
-
-
-	public void setHitAreaSize(float hitAreaSize) {
-		this.hitAreaSize = hitAreaSize;
-	}
-
-
-
 	public VelocityMod getVelocityMod() {
 		return velocityMod;
 	}
@@ -155,5 +138,37 @@ public class GameSettings {
 
 	public void setVelocityParabolicHitpointMin(float velocityParabolicHitpointMin) {
 		this.velocityParabolicHitpointMin = velocityParabolicHitpointMin;
+	}
+
+	public DeadlineType getDeadlineType() {
+		return deadlineType;
+	}
+
+	public void setDeadlineType(DeadlineType deadlineType) {
+		this.deadlineType = deadlineType;
+	}
+
+	public float getDeadlineConstantDecreaseValue() {
+		return deadlineConstantDecreaseValue;
+	}
+
+	public void setDeadlineConstantDecreaseValue(float deadlineConstantDecreaseValue) {
+		this.deadlineConstantDecreaseValue = deadlineConstantDecreaseValue;
+	}
+
+	public float getHitAreaSize() {
+		return hitAreaSize;
+	}
+
+	public void setHitAreaSize(float hitAreaSize) {
+		this.hitAreaSize = hitAreaSize;
+	}
+
+	public int getPointsToBePlayed() {
+		return pointsToBePlayed;
+	}
+
+	public void setPointsToBePlayed(int pointsToBePlayed) {
+		this.pointsToBePlayed = pointsToBePlayed;
 	}
 }

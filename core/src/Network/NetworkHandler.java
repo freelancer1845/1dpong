@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
@@ -30,12 +31,10 @@ public class NetworkHandler implements Runnable {
 		return visible;
 	}
 
-	public LinkedList<NetworkServerClient> networkClients = new LinkedList<NetworkServerClient>();
-	private LinkedList<Player> playerList = new LinkedList<Player>();
+	private ArrayList<NetworkServerClient> networkClients = new ArrayList<NetworkServerClient>();
 	
-	public NetworkHandler(int portNumber, LinkedList<Player> playerList){
+	public NetworkHandler(int portNumber){
 		this.portNumber = portNumber;
-		this.playerList = playerList;
 		this.serverName = "Standard Server";
 		try {
 			this.serverSocket = new ServerSocket(portNumber);
@@ -86,15 +85,10 @@ public class NetworkHandler implements Runnable {
 			Socket clientSocket = serverSocket.accept();
 			System.out.println("Connection accepted");
 			
-			if(!playerList.isEmpty()){
-				NetworkServerClient tempClient = new NetworkServerClient(clientSocket, playerList.removeFirst());
-				networkClients.add(tempClient);
-				Thread clientThread = new Thread(tempClient);
-				clientThread.start();
-			} else {
-				Gdx.app.log("Network Error", "All players Connected");
-			}
-			
+			NetworkServerClient tempClient = new NetworkServerClient(clientSocket, new Player(NetworkCodes.MAIN_KEY));
+			networkClients.add(tempClient);
+			Thread clientThread = new Thread(tempClient);
+			clientThread.start();
 		} catch (IOException e) {
 			//System.out.println("Timeout acception client reached.");
 			//e.printStackTrace();

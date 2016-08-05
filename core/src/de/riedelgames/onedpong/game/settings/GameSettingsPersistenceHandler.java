@@ -74,12 +74,17 @@ public class GameSettingsPersistenceHandler {
 	
 	private GameSettingsPersistenceHandler(){}
 	
-	public static GameSettings loadSettings() throws IOException {
+	public static GameSettings loadSettings() {
 		GameSettings gameSettings = new GameSettings();
 		FileHandle settingsFile = Gdx.files.internal("config.cfg");
 		Properties propertiesLoader = new Properties();
 		
-		propertiesLoader.load(settingsFile.read());
+		try {
+			propertiesLoader.load(settingsFile.read());
+		} catch (IOException e) {
+			Gdx.app.error("Settings", "IO Error while loading settings.");
+			e.printStackTrace();
+		}
 		
 		loadVelocitySettings(gameSettings, propertiesLoader);
 		loadDeadlineSettings(gameSettings, propertiesLoader);

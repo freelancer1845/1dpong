@@ -115,7 +115,7 @@ public class StartScreen implements Screen {
 		connectedClientsTable.add(connectedClientsLabel).padBottom(10);
 		
 		guiClients = new ArrayList<GuiClient>();
-		// guiClients.add(new GuiClient("Dummy", "192.168.2.101"));
+		guiClients.add(new GuiClient("Dummy", "192.168.2.101"));
 	}
 	
 	private void updateConnectedClientsList(){

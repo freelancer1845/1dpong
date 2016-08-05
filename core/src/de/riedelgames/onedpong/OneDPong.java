@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import Network.NetworkHandler;
 import de.riedelgames.onedpong.game.GameScreen;
 import de.riedelgames.onedpong.game.settings.GameSettings;
+import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
 import pregame.SettingsScreen;
 import pregame.StartScreen;
 
@@ -32,7 +33,7 @@ public class OneDPong extends Game	{
 		//Thread test = new Thread(networkHandler);
 		//test.start();
 		batch = new SpriteBatch();
-		this.setScreen(new StartScreen(this));
+		this.setScreen(new GameScreen(this, GameSettingsPersistenceHandler.loadSettings()));
 		//this.setScreen(new GameScreen(this, new GameSettings(1)));
 	}
 

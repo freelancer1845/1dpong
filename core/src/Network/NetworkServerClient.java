@@ -3,58 +3,14 @@ package Network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Map;
 import java.util.concurrent.SynchronousQueue;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-
 import de.riedelgames.onedpong.Player;
 
 
 public class NetworkServerClient implements Runnable {
-
-	/**
-	 * Size of the package size identifier in bytes.
-	 */
-	private static final int PACKAGE_SIZE_IDENTIFIER_BYTE_LENGTH = 1;
-	
-	/**
-	 * Handshake Package.
-	 */
-	private static final int HANDSHAKE = 100;
-	
-	/**
-	 * Handshake Response Package.
-	 */
-	private static final int HANDSHAKE_RESPONSE = 101;
-	
-	/**
-	 * Keys Pressed Package
-	 */
-	private static final int KEYS_PRESSED = 201;
-	
-	/**
-	 * Key Pressed Response Package.
-	 */
-	private static final int KEYS_PRESSED_RESPONSE = 202;
-	private static final int KEYS_PRESSED_HANDELED = 1;
-	
-	/**
-	 * Key Down.
-	 */
-	private static final int KEY_DOWN = -1;
-	
-	/**
-	 * Key Up.
-	 */
-	private static final int KEY_UP = 1;
-	
 	
 	private Socket socket;
 	private Player player;
@@ -71,7 +27,6 @@ public class NetworkServerClient implements Runnable {
 	public NetworkServerClient(Socket socket, Player player){
 		this.socket = socket;
 		this.player = player;
-		// open object stream
 		try{
 			this.dataInputStream = new DataInputStream(socket.getInputStream());
 			this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -139,24 +94,42 @@ public class NetworkServerClient implements Runnable {
 	private void processPackage(int[] readArray) throws IOException {
 		int packageId = readArray[0];
 		switch (packageId) {
-		case KEYS_PRESSED:
+		case NetworkCodes.HANDSHAKE:
+			break;
+		case NetworkCodes.NAME:
+			processNamePackage(readArray);
+			break;
+		case NetworkCodes.KEYS_PRESSED:
 			processKeysPressedPackage(readArray);
 			break;
+		
 		default:
 			Gdx.app.log("Unkown Package Id: ", Integer.toString(packageId));
 		}
 	}
 	
+	private void processNamePackage(int[] readArray) throws IOException {
+		
+		char[] nameArray = new char[readArray[1]];
+		for (int i = 0; i < nameArray.length; i++) {
+			nameArray[i] = (char) readArray[i + 2];
+		}
+		String playerName = String.valueOf(nameArray);
+		player.setName(playerName);
+		writeIntArray(NetworkCodes.NAME_RESPONSE, new int[]{NetworkCodes.NAME_ACCEPTED});
+		
+	}
+	
 	private void processKeysPressedPackage(int[] readArray) throws IOException {
 		System.out.println("Key package recevied.");
 		for (int i = 2; i < readArray.length - 2; i = i + 2) {
-			if (readArray[i] == KEY_DOWN) {
+			if (readArray[i] == NetworkCodes.KEY_DOWN) {
 				player.keyDown(readArray[i + 1]);
-			} else if (readArray[i] == KEY_UP) {
+			} else if (readArray[i] == NetworkCodes.KEY_UP) {
 				player.keyUp(readArray[i + 1]);
 			}
 		}
-		writeIntArray(KEYS_PRESSED_RESPONSE, new int[]{KEYS_PRESSED_HANDELED});
+		writeIntArray(NetworkCodes.KEYS_PRESSED_RESPONSE, new int[]{NetworkCodes.KEYS_PRESSED_HANDELED});
 	}
 	
 	

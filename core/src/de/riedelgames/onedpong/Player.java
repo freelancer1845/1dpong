@@ -11,9 +11,9 @@ public class Player implements InputProcessor {
 	private boolean keyDown = false;
 	private int playerKey;
 	
+	
 	public Player(int playerKey){
 		this.playerKey = playerKey;
-
 	}
 	
 	public int getScore() {

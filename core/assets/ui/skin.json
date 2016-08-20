@@ -1,0 +1,7 @@
+{
+	com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: ../font/square_unique.fnt } },
+	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+		default: { down: activeMenuButton, up: inactiveMenuButton, checked: activeMenuButton, font: default-font }
+	}
+	
+}

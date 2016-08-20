@@ -1,0 +1,27 @@
+
+uiElements.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+activeMenuButton
+  rotate: false
+  xy: 2, 2
+  size: 289, 77
+  orig: 289, 77
+  offset: 0, 0
+  index: -1
+header
+  rotate: false
+  xy: 2, 81
+  size: 479, 105
+  orig: 479, 105
+  offset: 0, 0
+  index: -1
+inactiveMenuButton
+  rotate: false
+  xy: 483, 109
+  size: 289, 77
+  orig: 289, 77
+  offset: 0, 0
+  index: -1

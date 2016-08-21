@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -29,13 +30,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import Network.NetworkHandler;
 import de.riedelgames.onedpong.OneDPong;
 import de.riedelgames.onedpong.game.GameScreen;
 import de.riedelgames.onedpong.game.settings.GameSettings;
 import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
+import de.riedelgames.onedpong.network.NetworkHandler;
+import de.riedelgames.onedpong.network.NetworkServerClient;
 
-public class StartScreen implements Screen {
+public class StartScreen implements Screen, InputProcessor {
 
     private static final String[] BUTTON_IDS = { "Button_start_game_id", "Button_settings_id", "Button_quit_id" };
 
@@ -66,6 +68,7 @@ public class StartScreen implements Screen {
 
     public StartScreen(OneDPong game) {
         this.game = game;
+        networkHandler = NetworkHandler.getInstance();
 
         background = new Sprite(new Texture("background.png"));
         background.setPosition(0, 0);
@@ -131,19 +134,25 @@ public class StartScreen implements Screen {
 
     private void addConnectedClientsView() {
         connectedClientsTable = new Table();
+        connectedClientsTable.setBackground(skin.getDrawable("connectedPlayersTable"));
         connectedClientsTable.setDebug(false);
-        rootTable.add(connectedClientsTable).padTop(50).padLeft(20).expandX();
+        rootTable.add(connectedClientsTable).padTop(20).padLeft(20).width(500).expandX();
         connectedClientsTable.left().top();
         Label connectedClientsLabel = new Label("Connected Clients", standardStyle);
         connectedClientsLabel.setName("connectedClientsLabel");
-        connectedClientsLabel.setFontScale(0.6f);
-        connectedClientsTable.add(connectedClientsLabel).padBottom(10);
+        connectedClientsLabel.setFontScale(0.5f);
+        connectedClientsTable.add(connectedClientsLabel).padBottom(10).padLeft(35).padTop(28).left().expandX();
 
         guiClients = new ArrayList<GuiClient>();
-        guiClients.add(new GuiClient("Dummy", "192.168.2.101"));
+        guiClients.add(new GuiClient("Dummysdssssssssssssssssss", "192.168.2.101"));
+        // guiClients.add(new GuiClient("Dummy2", "192.168.2.102"));
     }
 
     private void updateConnectedClientsList() {
+        guiClients.clear();
+        for (NetworkServerClient serverClient : networkHandler.getNetworkClients()) {
+            guiClients.add(new GuiClient(serverClient.getPlayer().getName(), serverClient.getIp()));
+        }
         if (updateTimer == -1) {
             updateTimer = System.nanoTime() / 1000000000;
         } else {
@@ -152,25 +161,28 @@ public class StartScreen implements Screen {
                 connectedClientsTable.clearChildren();
                 Label connectedClientsLabel = new Label("Connected Clients", standardStyle);
                 connectedClientsLabel.setName("connectedClientsLabel");
-                connectedClientsLabel.setFontScale(0.6f);
-                connectedClientsTable.add(connectedClientsLabel).padBottom(10);
+                connectedClientsLabel.setFontScale(0.5f);
+                connectedClientsTable.add(connectedClientsLabel).padBottom(10).padLeft(35).padTop(28).left().expandX();
                 for (GuiClient guiClient : guiClients) {
                     connectedClientsTable.row().left();
                     Label name = new Label(guiClient.getName(), standardStyle);
-                    name.setFontScale(0.5f);
+                    name.setFontScale(0.45f);
                     name.setName("guiClient");
-                    connectedClientsTable.add(name).left().padLeft(5).padBottom(5);
+                    if (name.getPrefWidth() > 270) {
+                        name.setText(name.getText().substring(0, 25) + "...");
+                    }
+                    connectedClientsTable.add(name).left().padLeft(40).padBottom(10);
                     Label ip = new Label(guiClient.getIp(), standardStyle);
-                    ip.setFontScale(0.5f);
+                    ip.setFontScale(0.45f);
                     ip.setName("guiClient");
-                    connectedClientsTable.add(ip).padLeft(5).padBottom(5).right();
+                    connectedClientsTable.add(ip).padLeft(35).padBottom(10).right().padRight(30);
                     connectedClientsTable.row().left();
                 }
                 if (connectedClientsTable.getChildren().size / 2 < 2) {
                     connectedClientsTable.row().left();
                     Label noClient = new Label("Waiting for player...", standardStyle);
-                    noClient.setFontScale(0.5f);
-                    connectedClientsTable.add(noClient).padLeft(5);
+                    noClient.setFontScale(0.45f);
+                    connectedClientsTable.add(noClient).padLeft(40).padRight(30);
                 }
                 updateTimer = -1;
             }
@@ -188,7 +200,7 @@ public class StartScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        processNetworkInput();
         updateConnectedClientsList();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -196,7 +208,8 @@ public class StartScreen implements Screen {
         game.batch.begin();
         // background.draw(game.batch);
         game.batch.end();
-
+        // System.out.println("Size: " + connectedClientsTable.getWidth() + " -
+        // " + connectedClientsTable.getHeight());
         stage.act(delta);
         stage.draw();
         // draw background
@@ -316,6 +329,67 @@ public class StartScreen implements Screen {
             }
         }
 
+    }
+
+    private void processNetworkInput() {
+        if (!networkHandler.getNetworkClients().isEmpty()) {
+            NetworkServerClient networkServerClient = networkHandler.getNetworkClients().iterator().next();
+            List<Integer> keysDownList = networkServerClient.getPlayer().getKeysDown();
+            synchronized (keysDownList) {
+                for (Integer keyCode : keysDownList) {
+                    stage.keyDown(keyCode);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        stage.keyDown(keycode);
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        stage.keyUp(keycode);
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        stage.keyTyped(character);
+        return true;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        stage.touchDown(screenX, screenY, pointer, button);
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        stage.touchUp(screenX, screenY, pointer, button);
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        stage.touchDragged(screenX, screenY, pointer);
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        stage.mouseMoved(screenX, screenY);
+        return true;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        stage.scrolled(amount);
+        return true;
     }
 
 }

@@ -1,4 +1,4 @@
-package Network;
+package de.riedelgames.onedpong.network;
 
 import java.io.Serializable;
 

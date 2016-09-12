@@ -20,6 +20,7 @@ import de.riedelgames.core.networking.api.constants.Keys;
 import de.riedelgames.core.networking.api.server.GameServerWrapper;
 import de.riedelgames.core.networking.api.server.NetworkKeyEvent;
 import de.riedelgames.gameobjects.Player;
+import de.riedelgames.onedpong.game.GameStatus;
 
 public class NetworkHandler implements Runnable {
 
@@ -110,19 +111,32 @@ public class NetworkHandler implements Runnable {
         }
     }
 
-    public void updatePlayerKeysGame(InputProcessor inputProcessor) {
+    public void updateKeyStatusGame(GameStatus gameStatus) {
         InetAddress[] connectedClients = gameServer.getConnectedClients();
         gameServer.sortNetworkPackages();
-        if (connectedClients.length > 0) {
-            List<NetworkKeyEvent> keyList = gameServer.getSortedDataMap().get(connectedClients[0]).getKeyEventList();
-            for (NetworkKeyEvent keyEvent : keyList) {
+        // Left Player
+        List<NetworkKeyEvent> keyList = gameServer.getSortedDataMap().get(connectedClients[0]).getKeyEventList();
+        for (NetworkKeyEvent keyEvent : keyList) {
+            if (keyEvent.getKeyEventCode() == Keys.FIRE) {
                 switch (keyEvent.getKeyEventType()) {
                 case NetworkKeyEvent.KEY_EVENT_DOWN:
-                    inputProcessor.keyDown(keyMapper(keyEvent.getKeyEventCode()));
+                    gameStatus.getLeftPlayer().setKeyDown();
                     break;
                 case NetworkKeyEvent.KEY_EVENT_UP:
-                    inputProcessor.keyUp(keyMapper(keyEvent.getKeyEventCode()));
+                    gameStatus.getLeftPlayer().unsetKeyDown();
+                }
+            }
+        }
+        // RightPlayer
+        keyList = gameServer.getSortedDataMap().get(connectedClients[1]).getKeyEventList();
+        for (NetworkKeyEvent keyEvent : keyList) {
+            if (keyEvent.getKeyEventCode() == Keys.FIRE) {
+                switch (keyEvent.getKeyEventType()) {
+                case NetworkKeyEvent.KEY_EVENT_DOWN:
+                    gameStatus.getRightPlayer().setKeyDown();
                     break;
+                case NetworkKeyEvent.KEY_EVENT_UP:
+                    gameStatus.getRightPlayer().unsetKeyDown();
                 }
             }
         }

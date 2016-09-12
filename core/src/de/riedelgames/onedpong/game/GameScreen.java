@@ -8,9 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import de.riedelgames.game.rallylogic.RallyException;
 import de.riedelgames.game.rallylogic.RallyLogic;
 import de.riedelgames.game.rallylogic.RallyLogicImpl;
@@ -29,6 +26,12 @@ import pregame.StartScreen;
 
 public class GameScreen implements Screen, InputProcessor {
 
+    /** Key Code for the left player . */
+    public static final int KEY_CODE_LEFT_PLAYER = 214812;
+
+    /** Key Code for the right player. */
+    public static final int KEY_CODE_RIGHT_PLAYER = 285152;
+
     public final OneDPong game;
     // private final GameLogic gameLogic;
     private final GameStatus gameStatus;
@@ -41,6 +44,9 @@ public class GameScreen implements Screen, InputProcessor {
     private Hud hud;
     private RallyLogic rallyLogic;
     private RallyProcessor rallyProcessor;
+
+    private long lastTime = System.currentTimeMillis();
+    private int ticks = 0;
 
     public GameScreen(OneDPong game, GameSettings gameSettings) {
         this.game = game;
@@ -90,7 +96,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         try {
             camera.update();
-            NetworkHandler.getInstance().fireKeyEvents(this);
+            NetworkHandler.getInstance().updateKeyStatusGame(gameStatus);
             rallyLogic.update(gameStatus, delta);
             if (rallyLogic.getRallyStatusSet().contains(RallyStatus.RALLY_STOPPED)) {
                 rallyProcessor.getRallyProcessStatusSet().remove(RallyProcessStatus.WAITING_FOR_RALLY);
@@ -108,6 +114,13 @@ public class GameScreen implements Screen, InputProcessor {
             rallyProcessor.draw(game.batch);
             game.batch.end();
             hud.draw();
+
+            ticks++;
+            if (System.currentTimeMillis() - lastTime > 1000) {
+                System.out.println("Ticks Per Second: " + ticks);
+                ticks = 0;
+                lastTime = System.currentTimeMillis();
+            }
         } catch (RallyException e) {
             Gdx.app.log("Rally Exception: ", e.getMessage());
             game.setScreen(new StartScreen(game));
@@ -152,10 +165,10 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.UP) {
+        if (keycode == KEY_CODE_LEFT_PLAYER) {
             gameStatus.getLeftPlayer().setKeyDown();
             return true;
-        } else if (keycode == Input.Keys.DOWN) {
+        } else if (keycode == KEY_CODE_RIGHT_PLAYER) {
             gameStatus.getRightPlayer().setKeyDown();
             return true;
         } else if (keycode == Input.Keys.ESCAPE) {
@@ -166,10 +179,10 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.UP) {
+        if (keycode == KEY_CODE_LEFT_PLAYER) {
             gameStatus.getLeftPlayer().unsetKeyDown();
             return true;
-        } else if (keycode == Input.Keys.DOWN) {
+        } else if (keycode == KEY_CODE_RIGHT_PLAYER) {
             gameStatus.getRightPlayer().unsetKeyDown();
             return true;
         }

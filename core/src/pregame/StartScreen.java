@@ -56,7 +56,7 @@ public class StartScreen implements Screen, InputProcessor {
     private List<GuiClient> guiClients;
     private double updateTimer = -1;
 
-    public static boolean fullScreenMod = true;
+    public static boolean fullScreenMod = false;
     public static int windowWidth = 640;
     public static int windowHeight = 480;
 
@@ -69,6 +69,8 @@ public class StartScreen implements Screen, InputProcessor {
     public StartScreen(OneDPong game) {
         this.game = game;
         networkHandler = NetworkHandler.getInstance();
+        networkHandler.setVisible(true);
+        networkHandler.startServer();
 
         background = new Sprite(new Texture("background.png"));
         background.setPosition(0, 0);
@@ -332,16 +334,7 @@ public class StartScreen implements Screen, InputProcessor {
     }
 
     private void processNetworkInput() {
-        if (!networkHandler.getNetworkClients().isEmpty()) {
-            NetworkServerClient networkServerClient = networkHandler.getNetworkClients().iterator().next();
-            List<Integer> keysDownList = networkServerClient.getPlayer().getKeysDown();
-            synchronized (keysDownList) {
-                for (Integer keyCode : keysDownList) {
-                    stage.keyDown(keyCode);
-                }
-            }
-        }
-
+        networkHandler.fireKeyEvents(stage);
     }
 
     @Override

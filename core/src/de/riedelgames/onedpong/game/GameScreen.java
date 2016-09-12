@@ -90,6 +90,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         try {
             camera.update();
+            NetworkHandler.getInstance().fireKeyEvents(this);
             rallyLogic.update(gameStatus, delta);
             if (rallyLogic.getRallyStatusSet().contains(RallyStatus.RALLY_STOPPED)) {
                 rallyProcessor.getRallyProcessStatusSet().remove(RallyProcessStatus.WAITING_FOR_RALLY);

@@ -1,4 +1,4 @@
-package de.riedelgames.onedpong;
+package de.riedelgames.gameobjects;
 
 import java.util.ArrayList;
 import java.util.List;

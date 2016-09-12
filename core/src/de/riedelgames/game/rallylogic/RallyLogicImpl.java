@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import de.riedelgames.gameobjects.Ball;
-import de.riedelgames.onedpong.Player;
+import de.riedelgames.gameobjects.Player;
 import de.riedelgames.onedpong.game.GameConstants;
 import de.riedelgames.onedpong.game.GameStatus;
 import de.riedelgames.onedpong.game.velocity.VelocityLogic;

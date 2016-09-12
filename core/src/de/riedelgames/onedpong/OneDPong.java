@@ -9,6 +9,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.riedelgames.gameobjects.Player;
 import de.riedelgames.onedpong.game.GameScreen;
 import de.riedelgames.onedpong.game.settings.GameSettings;
 import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
@@ -28,9 +29,6 @@ public class OneDPong extends Game {
 
     @Override
     public void create() {
-        networkHandler = NetworkHandler.getInstance();
-
-        new Thread(networkHandler).start();
 
         // playerList.add(new Player(Input.Keys.A));
         // playerList.add(new Player(1));

@@ -12,98 +12,66 @@ import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.Inputs;
 
-import de.riedelgames.onedpong.Player;
+import de.riedelgames.core.networking.api.constants.Keys;
+import de.riedelgames.core.networking.api.server.GameServerWrapper;
+import de.riedelgames.core.networking.api.server.NetworkKeyEvent;
+import de.riedelgames.gameobjects.Player;
 
 public class NetworkHandler implements Runnable {
 
     private static NetworkHandler instance = null;
 
-    private final static String GROUPNAME = "229.127.12.17";
-
-    private DatagramSocket udpSocket;
-
-    private int portNumber;
-    private String serverName;
-    private ServerSocket serverSocket;
-
-    private boolean visible = true;
+    /** Underlying server. */
+    private GameServerWrapper gameServer;
 
     private List<NetworkServerClient> networkClients = new ArrayList<NetworkServerClient>();
 
     public static NetworkHandler getInstance() {
         if (instance == null) {
-            instance = new NetworkHandler(4000);
+            instance = new NetworkHandler();
         }
         return instance;
     }
 
-    private NetworkHandler(int portNumber) {
-        this.portNumber = portNumber;
-        this.serverName = "Standard Server";
-        try {
-            this.serverSocket = new ServerSocket(portNumber);
-            serverSocket.setSoTimeout(2000);
+    private NetworkHandler() {
+        this.gameServer = new GameServerWrapper();
+    }
 
-            udpSocket = new DatagramSocket(portNumber);
-        } catch (IOException e) {
-            System.out.println("Error creating ServerSocket.");
-            e.printStackTrace();
-        }
+    public void startServer() {
+        this.gameServer.startServer();
+    }
+
+    public void stopServer() {
+        this.gameServer.stopServer();
     }
 
     @Override
     public void run() {
         while (true) {
-            if (visible) {
-                makeServerVisible();
-            }
-            listenForClient();
             cleanList();
         }
     }
 
-    private void makeServerVisible() {
-        byte[] buf = new byte[256];
-
-        try {
-            buf = serverName.getBytes();
-            InetAddress group = InetAddress.getByName(GROUPNAME);
-            DatagramPacket packet;
-            packet = new DatagramPacket(buf, buf.length, group, portNumber);
-            udpSocket.send(packet);
-        } catch (UnknownHostException e) {
-            Gdx.app.log("Network: ", "Error in UDP package send: UnknownHostException");
-            e.printStackTrace();
-        } catch (IOException e) {
-            Gdx.app.log("Network: ", "Error in UDP package send: IOException");
-            e.printStackTrace();
-        }
-    }
-
     public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    private void listenForClient() {
-        try {
-            Socket clientSocket = serverSocket.accept();
-            System.out.println("Connection accepted");
-
-            NetworkServerClient tempClient = new NetworkServerClient(clientSocket, new Player(NetworkCodes.MAIN_KEY));
-            networkClients.add(tempClient);
-            Thread clientThread = new Thread(tempClient);
-            clientThread.start();
-        } catch (IOException e) {
-            // System.out.println("Timeout acception client reached.");
-            // e.printStackTrace();
-        }
+        gameServer.setVisibility(visible);
     }
 
     private void cleanList() {
         List<NetworkServerClient> deleteList = new ArrayList<NetworkServerClient>();
+        InetAddress[] connectedClients = this.gameServer.getConnectedClients();
         for (NetworkServerClient client : networkClients) {
-            if (!client.isConnected()) {
+            boolean isConnected = false;
+            for (int i = 0; i < connectedClients.length; i++) {
+                if (client.getInetAddress().equals(connectedClients[i])) {
+                    isConnected = true;
+                    break;
+                }
+            }
+            if (!isConnected) {
                 deleteList.add(client);
             }
         }
@@ -111,20 +79,73 @@ public class NetworkHandler implements Runnable {
     }
 
     public void dispose() {
-        try {
-            this.serverSocket.close();
-        } catch (IOException e) {
-            Gdx.app.log("Network Handler: ", "Error closing the socket (already closed?");
-            e.printStackTrace();
-        }
-    }
-
-    public boolean isVisible() {
-        return visible;
+        this.gameServer.dispose();
     }
 
     public List<NetworkServerClient> getNetworkClients() {
+        InetAddress[] connectedClients = gameServer.getConnectedClients();
+        for (int i = 0; i < connectedClients.length; i++) {
+            if (!networkClientPresent(connectedClients[i])) {
+                networkClients.add(new NetworkServerClient(connectedClients[i], new Player(0)));
+            }
+        }
         return Collections.unmodifiableList(networkClients);
+    }
+
+    public void fireKeyEvents(InputProcessor inputProcessor) {
+        InetAddress[] connectedClients = gameServer.getConnectedClients();
+        gameServer.sortNetworkPackages();
+        if (connectedClients.length > 0) {
+            List<NetworkKeyEvent> keyList = gameServer.getSortedDataMap().get(connectedClients[0]).getKeyEventList();
+            for (NetworkKeyEvent keyEvent : keyList) {
+                switch (keyEvent.getKeyEventType()) {
+                case NetworkKeyEvent.KEY_EVENT_DOWN:
+                    inputProcessor.keyDown(keyMapper(keyEvent.getKeyEventCode()));
+                    break;
+                case NetworkKeyEvent.KEY_EVENT_UP:
+                    inputProcessor.keyUp(keyMapper(keyEvent.getKeyEventCode()));
+                    break;
+                }
+            }
+        }
+    }
+
+    public void updatePlayerKeysGame(InputProcessor inputProcessor) {
+        InetAddress[] connectedClients = gameServer.getConnectedClients();
+        gameServer.sortNetworkPackages();
+        if (connectedClients.length > 0) {
+            List<NetworkKeyEvent> keyList = gameServer.getSortedDataMap().get(connectedClients[0]).getKeyEventList();
+            for (NetworkKeyEvent keyEvent : keyList) {
+                switch (keyEvent.getKeyEventType()) {
+                case NetworkKeyEvent.KEY_EVENT_DOWN:
+                    inputProcessor.keyDown(keyMapper(keyEvent.getKeyEventCode()));
+                    break;
+                case NetworkKeyEvent.KEY_EVENT_UP:
+                    inputProcessor.keyUp(keyMapper(keyEvent.getKeyEventCode()));
+                    break;
+                }
+            }
+        }
+    }
+
+    private boolean networkClientPresent(InetAddress inetAddress) {
+        for (NetworkServerClient client : networkClients) {
+            if (client.getInetAddress().equals(inetAddress)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int keyMapper(byte networkKeyCode) {
+        switch (networkKeyCode) {
+        case Keys.KEY_DOWN:
+            return Input.Keys.DOWN;
+        case Keys.KEY_UP:
+            return Input.Keys.UP;
+        default:
+            return -1;
+        }
     }
 
 }

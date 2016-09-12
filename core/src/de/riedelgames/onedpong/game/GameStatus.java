@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.riedelgames.gameobjects.Ball;
 import de.riedelgames.gameobjects.Deadline;
-import de.riedelgames.onedpong.Player;
+import de.riedelgames.gameobjects.Player;
 import de.riedelgames.onedpong.game.settings.GameSettings;
 
 public class GameStatus {

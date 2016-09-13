@@ -14,8 +14,8 @@ import de.riedelgames.onedpong.game.GameScreen;
 import de.riedelgames.onedpong.game.settings.GameSettings;
 import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
 import de.riedelgames.onedpong.network.NetworkHandler;
-import pregame.SettingsScreen;
-import pregame.StartScreen;
+import de.riedelgames.onedpong.pregame.SettingsScreen;
+import de.riedelgames.onedpong.pregame.StartScreen;
 
 public class OneDPong extends Game {
 

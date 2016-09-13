@@ -114,36 +114,34 @@ public class NetworkHandler implements Runnable {
     public void updateKeyStatusGame(GameStatus gameStatus) {
         InetAddress[] connectedClients = gameServer.getConnectedClients();
         gameServer.sortNetworkPackages();
-        updateForSinglePlayer(gameStatus);
+        // updateForSinglePlayer(gameStatus);
 
         // Left Player
-        // List<NetworkKeyEvent> keyList =
-        // gameServer.getSortedDataMap().get(connectedClients[0]).getKeyEventList();
-        // for (NetworkKeyEvent keyEvent : keyList) {
-        // if (keyEvent.getKeyEventCode() == Keys.FIRE) {
-        // switch (keyEvent.getKeyEventType()) {
-        // case NetworkKeyEvent.KEY_EVENT_DOWN:
-        // gameStatus.getLeftPlayer().setKeyDown();
-        // break;
-        // case NetworkKeyEvent.KEY_EVENT_UP:
-        // gameStatus.getLeftPlayer().unsetKeyDown();
-        // }
-        // }
-        // }
+        List<NetworkKeyEvent> keyList = gameServer.getSortedDataMap().get(connectedClients[0]).getKeyEventList();
+        for (NetworkKeyEvent keyEvent : keyList) {
+            if (keyEvent.getKeyEventCode() == Keys.FIRE) {
+                switch (keyEvent.getKeyEventType()) {
+                case NetworkKeyEvent.KEY_EVENT_DOWN:
+                    gameStatus.getLeftPlayer().setKeyDown();
+                    break;
+                case NetworkKeyEvent.KEY_EVENT_UP:
+                    gameStatus.getLeftPlayer().unsetKeyDown();
+                }
+            }
+        }
         // RightPlayer
-        // keyList =
-        // gameServer.getSortedDataMap().get(connectedClients[1]).getKeyEventList();
-        // for (NetworkKeyEvent keyEvent : keyList) {
-        // if (keyEvent.getKeyEventCode() == Keys.FIRE) {
-        // switch (keyEvent.getKeyEventType()) {
-        // case NetworkKeyEvent.KEY_EVENT_DOWN:
-        // gameStatus.getRightPlayer().setKeyDown();
-        // break;
-        // case NetworkKeyEvent.KEY_EVENT_UP:
-        // gameStatus.getRightPlayer().unsetKeyDown();
-        // }
-        // }
-        // }
+        keyList = gameServer.getSortedDataMap().get(connectedClients[1]).getKeyEventList();
+        for (NetworkKeyEvent keyEvent : keyList) {
+            if (keyEvent.getKeyEventCode() == Keys.FIRE) {
+                switch (keyEvent.getKeyEventType()) {
+                case NetworkKeyEvent.KEY_EVENT_DOWN:
+                    gameStatus.getRightPlayer().setKeyDown();
+                    break;
+                case NetworkKeyEvent.KEY_EVENT_UP:
+                    gameStatus.getRightPlayer().unsetKeyDown();
+                }
+            }
+        }
     }
 
     private boolean networkClientPresent(InetAddress inetAddress) {

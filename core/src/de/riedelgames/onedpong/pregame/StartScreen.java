@@ -1,4 +1,4 @@
-package pregame;
+package de.riedelgames.onedpong.pregame;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,9 +46,6 @@ public class StartScreen implements Screen, InputProcessor {
     private final Stage stage;
 
     private final Skin skin;
-    private final TextureAtlas textureAtlas;
-    private BitmapFont standardFont = new BitmapFont(
-            Gdx.files.getFileHandle("font/square_unique.fnt", Files.FileType.Internal));
 
     private final Table rootTable;
     private Table menu;
@@ -66,6 +63,9 @@ public class StartScreen implements Screen, InputProcessor {
     public static LabelStyle standardStyle = new LabelStyle(
             new BitmapFont(Gdx.files.getFileHandle("font/square_unique.fnt", Files.FileType.Internal)), Color.WHITE);
 
+    /** Font that will be used. */
+    private BitmapFont standardFont = SkinProvider.getStandardFont();
+
     public StartScreen(OneDPong game) {
         this.game = game;
         networkHandler = NetworkHandler.getInstance();
@@ -78,10 +78,7 @@ public class StartScreen implements Screen, InputProcessor {
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        textureAtlas = new TextureAtlas(Gdx.files.internal("ui/uiElements.atlas"));
-        skin = new Skin();
-        skin.addRegions(textureAtlas);
-        skin.load(Gdx.files.internal("ui/skin.json"));
+        skin = SkinProvider.getSkin();
 
         rootTable = new Table();
         rootTable.setFillParent(true);
@@ -330,7 +327,7 @@ public class StartScreen implements Screen, InputProcessor {
                 // game.setScreen(new GameScreen(game,
                 // GameSettingsPersistenceHandler.loadSettings(), false));
                 // }
-                if (guiClients.size() == 1) {
+                if (guiClients.size() == 2) {
                     game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), true));
                 }
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[1]) {

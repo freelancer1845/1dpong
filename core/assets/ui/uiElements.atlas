@@ -32,3 +32,37 @@ inactiveMenuButton
   orig: 600, 160
   offset: 0, 0
   index: -1
+settingsDelimiter
+  rotate: false
+  xy: 804, 422
+  size: 83, 79
+  orig: 83, 79
+  offset: 0, 0
+  index: -1
+settingsLeftCorner
+  rotate: false
+  xy: 604, 250
+  size: 87, 74
+  orig: 87, 74
+  offset: 0, 0
+  index: -1
+settingsMain
+  rotate: false
+  xy: 1004, 858
+  size: 3, 74
+  orig: 3, 74
+  offset: 0, 0
+  index: -1
+
+uiElements2.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+settingsHeader
+  rotate: false
+  xy: 2, 2
+  size: 531, 160
+  orig: 531, 160
+  offset: 0, 0
+  index: -1

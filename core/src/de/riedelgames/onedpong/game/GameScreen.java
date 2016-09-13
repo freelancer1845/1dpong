@@ -22,7 +22,7 @@ import de.riedelgames.onedpong.OneDPong;
 import de.riedelgames.onedpong.game.hud.Hud;
 import de.riedelgames.onedpong.game.settings.GameSettings;
 import de.riedelgames.onedpong.network.NetworkHandler;
-import pregame.StartScreen;
+import de.riedelgames.onedpong.pregame.StartScreen;
 
 public class GameScreen implements Screen, InputProcessor {
 

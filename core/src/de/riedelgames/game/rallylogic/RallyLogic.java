@@ -4,19 +4,38 @@ import java.util.EnumSet;
 import de.riedelgames.onedpong.game.GameStatus;
 
 public interface RallyLogic {
-	
-	/** This updates the rally, i.e. does all the logic concerning the rally */
-	public abstract void update(GameStatus gameStatus, float deltaTime) throws RallyException;
-	
-	/** This gets the status of the Rally (a set of enums) */
-	public abstract EnumSet<RallyStatus> getRallyStatusSet();
-	
-	/** Set the Rally Status */
-	public abstract void setRallyStatusSet(EnumSet<RallyStatus> rallyStatusSet);
-	
-	/** Add a rally status */
-	public abstract void addRallyStatus(RallyStatus rallyStatus);
-	
-	/** Remove a rally status */
-	public abstract void removeRallyStatus(RallyStatus rallyStatus);
+
+    /**
+     * This starts the Rally Logic calculations with a given TickRate (0 =
+     * maximal) and a {@link GameStatus} that will be updated. You can also the
+     * paused logic with that.
+     */
+    public void start(int tickrate, GameStatus gameStatus);
+
+    /**
+     * Sets the desired Tickrate of the RallyLogic.
+     */
+    public void setTickrate(int tickrate);
+
+    /**
+     * Pauses the Rally Logic.
+     */
+    public void pause();
+
+    /**
+     * Stops and disposes the RallyLogic.
+     */
+    public void dispose();
+
+    /** This gets the status of the Rally (a set of enums) */
+    public EnumSet<RallyStatus> getRallyStatusSet();
+
+    /** Set the Rally Status */
+    public void setRallyStatusSet(EnumSet<RallyStatus> rallyStatusSet);
+
+    /** Add a rally status */
+    public void addRallyStatus(RallyStatus rallyStatus);
+
+    /** Remove a rally status */
+    public void removeRallyStatus(RallyStatus rallyStatus);
 }

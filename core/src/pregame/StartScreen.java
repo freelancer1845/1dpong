@@ -323,7 +323,16 @@ public class StartScreen implements Screen, InputProcessor {
 
         private void handleEnter() {
             if (BUTTON_IDS[activeButton] == BUTTON_IDS[0]) {
-                game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings()));
+                // if (guiClients.size() > 1) {
+                // game.setScreen(new GameScreen(game,
+                // GameSettingsPersistenceHandler.loadSettings(), true));
+                // } else {
+                // game.setScreen(new GameScreen(game,
+                // GameSettingsPersistenceHandler.loadSettings(), false));
+                // }
+                if (guiClients.size() == 1) {
+                    game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), true));
+                }
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[1]) {
                 game.setScreen(new SettingsScreen(game));
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[2]) {

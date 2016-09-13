@@ -32,23 +32,36 @@ public class GameScreen implements Screen, InputProcessor {
     /** Key Code for the right player. */
     public static final int KEY_CODE_RIGHT_PLAYER = 285152;
 
+    /** The underlying game class. */
     public final OneDPong game;
-    // private final GameLogic gameLogic;
+
+    /**
+     * Object tracking the gameStatus (communication between render and logic).
+     */
     private final GameStatus gameStatus;
+
+    /** Object containing the current {@link GameSettings}. */
     private final GameSettings gameSettings;
+
     // Basic Setup of Background
     // private Viewport viewport;
     private OrthographicCamera camera;
     private Sprite background;
 
+    /** Hud of the Game. */
     private Hud hud;
+
+    /** Rally Logic object. */
     private RallyLogic rallyLogic;
+
+    /** RallyProcessor like a referee. */
     private RallyProcessor rallyProcessor;
 
+    /** For Debug purposes. */
     private long lastTime = System.currentTimeMillis();
     private int ticks = 0;
 
-    public GameScreen(OneDPong game, GameSettings gameSettings) {
+    public GameScreen(OneDPong game, GameSettings gameSettings, boolean networkGame) {
         this.game = game;
 
         // Basic initialization of Background
@@ -73,12 +86,15 @@ public class GameScreen implements Screen, InputProcessor {
         gameStatus.getBall().setY(GameConstants.GAME_WORLD_HEIGHT / 2 - gameStatus.getBall().getWidth() / 2);
         this.gameSettings = gameSettings;
         gameStatus.setGameSettings(gameSettings);
+        gameStatus.setNetworkGame(networkGame);
         rallyLogic = RallyLogicImpl.getInstance();
         rallyProcessor = RallyProcessorImpl.getInstance();
         hud = new Hud(gameStatus);
         rallyLogic.addRallyStatus(RallyStatus.RALLY_IDELING);
         rallyLogic.addRallyStatus(RallyStatus.NEUTRAL_SERVE);
+        rallyLogic.start(100, gameStatus);
         Gdx.input.setInputProcessor(this);
+        // NetworkHandler.getInstance().stopServer();
 
     }
 
@@ -94,36 +110,29 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
 
-        try {
-            camera.update();
-            NetworkHandler.getInstance().updateKeyStatusGame(gameStatus);
-            rallyLogic.update(gameStatus, delta);
-            if (rallyLogic.getRallyStatusSet().contains(RallyStatus.RALLY_STOPPED)) {
-                rallyProcessor.getRallyProcessStatusSet().remove(RallyProcessStatus.WAITING_FOR_RALLY);
-            }
-            rallyProcessor.update(gameStatus, delta);
-            hud.update(gameStatus);
+        camera.update();
+        if (rallyLogic.getRallyStatusSet().contains(RallyStatus.RALLY_STOPPED)) {
+            rallyProcessor.getRallyProcessStatusSet().remove(RallyProcessStatus.WAITING_FOR_RALLY);
+        }
+        rallyProcessor.update(gameStatus, delta);
+        hud.update(gameStatus);
 
-            game.batch.setProjectionMatrix(camera.combined);
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            // draw background
-            game.batch.begin();
-            background.draw(game.batch);
-            gameStatus.draw(game.batch);
-            rallyProcessor.draw(game.batch);
-            game.batch.end();
-            hud.draw();
+        game.batch.setProjectionMatrix(camera.combined);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // draw background
+        game.batch.begin();
+        background.draw(game.batch);
+        gameStatus.draw(game.batch);
+        rallyProcessor.draw(game.batch);
+        game.batch.end();
+        hud.draw();
 
-            ticks++;
-            if (System.currentTimeMillis() - lastTime > 1000) {
-                System.out.println("Ticks Per Second: " + ticks);
-                ticks = 0;
-                lastTime = System.currentTimeMillis();
-            }
-        } catch (RallyException e) {
-            Gdx.app.log("Rally Exception: ", e.getMessage());
-            game.setScreen(new StartScreen(game));
+        ticks++;
+        if (System.currentTimeMillis() - lastTime > 1000) {
+            System.out.println("FPS: " + ticks);
+            ticks = 0;
+            lastTime = System.currentTimeMillis();
         }
     }
 
@@ -165,26 +174,32 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == KEY_CODE_LEFT_PLAYER) {
-            gameStatus.getLeftPlayer().setKeyDown();
-            return true;
-        } else if (keycode == KEY_CODE_RIGHT_PLAYER) {
-            gameStatus.getRightPlayer().setKeyDown();
-            return true;
-        } else if (keycode == Input.Keys.ESCAPE) {
+        if (!gameStatus.isNetworkGame()) {
+            if (keycode == Input.Keys.A) {
+                gameStatus.getLeftPlayer().setKeyDown();
+                return true;
+            } else if (keycode == Input.Keys.L) {
+                gameStatus.getRightPlayer().setKeyDown();
+                return true;
+            }
+        }
+        if (keycode == Input.Keys.ESCAPE) {
             Gdx.app.exit();
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == KEY_CODE_LEFT_PLAYER) {
-            gameStatus.getLeftPlayer().unsetKeyDown();
-            return true;
-        } else if (keycode == KEY_CODE_RIGHT_PLAYER) {
-            gameStatus.getRightPlayer().unsetKeyDown();
-            return true;
+        if (gameStatus.isNetworkGame()) {
+            if (keycode == Input.Keys.A) {
+                gameStatus.getLeftPlayer().unsetKeyDown();
+                return true;
+            } else if (keycode == Input.Keys.L) {
+                gameStatus.getRightPlayer().unsetKeyDown();
+                return true;
+            }
         }
         return false;
     }

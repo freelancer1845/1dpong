@@ -36,7 +36,7 @@ public class GameSettings {
 		setFullScreenMod(false);
 		setPointsToBePlayed(5);
 		setDeadlineType(DeadlineType.constantDecrease);
-		velocityMod = VelocityMod.constantIncrease;
+		velocityMod = VelocityMod.Increase;
 		setDeadlineConstantDecreaseValue(0.01f);
 		velocityConstantIncreaseValue = 0.1f;
 		setBallStartVelocity(2.0f);

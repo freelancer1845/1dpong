@@ -284,14 +284,6 @@ public class StartScreen implements Screen, InputProcessor {
                 } else {
                     activeButton = 0;
                 }
-                for (int i = 0; i < BUTTON_IDS.length; i++) {
-                    TextButton button = rootTable.findActor(BUTTON_IDS[i]);
-                    if (i != activeButton) {
-                        button.setChecked(false);
-                    } else {
-                        button.setChecked(true);
-                    }
-                }
             } else if (keycode == Input.Keys.UP) {
                 if (activeButton != 0) {
                     activeButton -= 1;
@@ -331,7 +323,7 @@ public class StartScreen implements Screen, InputProcessor {
                     game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), true));
                 }
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[1]) {
-                game.setScreen(new SettingsScreen(game));
+                game.setScreen(new SettingsScreen(game, GameSettingsPersistenceHandler.loadSettings()));
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[2]) {
                 Gdx.app.exit();
             }

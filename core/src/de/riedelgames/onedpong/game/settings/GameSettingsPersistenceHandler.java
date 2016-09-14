@@ -22,7 +22,7 @@ import de.riedelgames.onedpong.game.velocity.VelocityMod;
  */
 public class GameSettingsPersistenceHandler {
 
-    private static final String VELOCITY_DEFAULT_MOD = VelocityMod.parabolicHitPoint.toString();
+    private static final String VELOCITY_DEFAULT_MOD = VelocityMod.ParabolicHitPoint.toString();
 
     private static final String VELOCITY_MOD = "velocityMod";
 

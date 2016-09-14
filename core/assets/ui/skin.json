@@ -1,8 +1,17 @@
 {
 	com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: ../font/square_unique.fnt } },
+	com.badlogic.gdx.graphics.Color: {
+		white: { r: 1, g: 1, b: 1, a: 1 }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+		default: { font: default-font, fontColor: white}
+	},
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		default: { down: activeMenuButton, up: inactiveMenuButton, checked: activeMenuButton, font: default-font },
-		settingsHeader: { down: settingsHeader, up: settingsHeader, checked: settingsHeader, font: default-font}
+		settingsHeader: { down: settingsHeader, up: settingsHeader, checked: settingsHeader, font: default-font }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+		default: { down: settingsField, up: settingsField, checked: settingsField },
+		settingsButton: { down: settingsField, up: settingsField, checked: settingsField }
 	}
-	
 }

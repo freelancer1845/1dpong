@@ -10,10 +10,10 @@ public class VelocityLogic {
 	private VelocityLogic(){};
 	
 	public static void update(GameStatus gameStatus, float deltaTime) {
-		if(gameStatus.getGameSettings().getVelocityMod() == VelocityMod.constantIncrease){
+		if(gameStatus.getGameSettings().getVelocityMod() == VelocityMod.Increase){
 			gameStatus.getBall().setVelX((Math.abs(gameStatus.getBall().getVelX())
 					+ (gameStatus.getGameSettings().getVelocityConstantIncreaseValue())) * Math.signum(gameStatus.getBall().getVelX() * -1));
-		} else if(gameStatus.getGameSettings().getVelocityMod() == VelocityMod.parabolicHitPoint){
+		} else if(gameStatus.getGameSettings().getVelocityMod() == VelocityMod.ParabolicHitPoint){
 			if(gameStatus.getBall().getVelX() <= 0){
 				float max = gameStatus.getGameSettings().getVelocityParabolicHitpointMax();
 				float min = gameStatus.getGameSettings().getVelocityParabolicHitpointMin();

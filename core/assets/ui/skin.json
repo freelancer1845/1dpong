@@ -8,10 +8,14 @@
 	},
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		default: { down: activeMenuButton, up: inactiveMenuButton, checked: activeMenuButton, font: default-font },
-		settingsHeader: { down: settingsHeader, up: settingsHeader, checked: settingsHeader, font: default-font }
+		settingsHeader: { down: settingsHeader, up: settingsHeader, checked: settingsHeader, font: default-font },
+		endDialogButton: { down: settingsFieldActive, up: settingsField, checked: settingsFieldFocused, font: default-font }
 	},
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		default: { down: settingsField, up: settingsField, checked: settingsField },
-		settingsButton: { down: settingsField, up: settingsField, checked: settingsField }
+		settingsButton: { down: settingsFieldActive, up: settingsField, checked: settingsFieldFocused }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+		endDialog: { background: settingsHeader, titleFont: default-font, titleFontColor: white }
 	}
 }

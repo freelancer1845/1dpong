@@ -3,26 +3,22 @@ package de.riedelgames.onedpong;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.riedelgames.gameobjects.Player;
-import de.riedelgames.onedpong.game.GameScreen;
-import de.riedelgames.onedpong.game.settings.GameSettings;
-import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
 import de.riedelgames.onedpong.network.NetworkHandler;
-import de.riedelgames.onedpong.pregame.SettingsScreen;
 import de.riedelgames.onedpong.pregame.StartScreen;
 
 public class OneDPong extends Game {
 
     public LinkedList<Player> playerList = new LinkedList<Player>();
+
     private NetworkHandler networkHandler;
 
     public static final Player leftPlayer = new Player(Input.Keys.A);
+
     public static final Player rightPlayer = new Player(Input.Keys.L);
 
     public SpriteBatch batch;
@@ -52,4 +48,5 @@ public class OneDPong extends Game {
     public InputProcessor getScreenAsInputProcessor() {
         return (InputProcessor) this.getScreen();
     }
+
 }

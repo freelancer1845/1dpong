@@ -1,6 +1,5 @@
 package de.riedelgames.onedpong.pregame;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +14,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -53,9 +48,9 @@ public class StartScreen implements Screen, InputProcessor {
     private List<GuiClient> guiClients;
     private double updateTimer = -1;
 
-    public static boolean fullScreenMod = false;
-    public static int windowWidth = 640;
-    public static int windowHeight = 480;
+    public boolean fullScreenMod = false;
+    public int windowWidth = 640;
+    public int windowHeight = 480;
 
     private OrthographicCamera camera;
     private Sprite background;
@@ -72,9 +67,14 @@ public class StartScreen implements Screen, InputProcessor {
         networkHandler.setVisible(true);
         networkHandler.startServer();
 
+        GameSettings gameSettings = GameSettingsPersistenceHandler.loadSettings();
+        windowWidth = gameSettings.getWindowWidth();
+        windowHeight = gameSettings.getWindowHeight();
+        fullScreenMod = gameSettings.isFullScreenMod();
+
         background = new Sprite(new Texture("background.png"));
         background.setPosition(0, 0);
-        background.setSize(windowWidth, windowHeight);
+        background.setSize(-1, -1);
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -312,6 +312,9 @@ public class StartScreen implements Screen, InputProcessor {
 
         private void handleEnter() {
             if (BUTTON_IDS[activeButton] == BUTTON_IDS[0]) {
+                if (guiClients.size() == 0) {
+                    game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), false));
+                }
                 // if (guiClients.size() > 1) {
                 // game.setScreen(new GameScreen(game,
                 // GameSettingsPersistenceHandler.loadSettings(), true));

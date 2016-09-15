@@ -1,10 +1,8 @@
 package de.riedelgames.onedpong.game.settings;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Properties;
 
 import com.badlogic.gdx.Gdx;
@@ -134,7 +132,7 @@ public class GameSettingsPersistenceHandler {
 
     }
 
-    public static void writeGameSettings(GameSettings settings) throws IOException {
+    public static void writeGameSettings(GameSettings settings) {
 
         Properties propertiesSaver = new Properties();
 
@@ -142,10 +140,19 @@ public class GameSettingsPersistenceHandler {
         saveDeadlineSettings(settings, propertiesSaver);
         saveRulesSettings(settings, propertiesSaver);
         saveScreenSettings(settings, propertiesSaver);
-        FileOutputStream fileHandle = new FileOutputStream(Gdx.files.internal("config.cfg").file().getPath());
-        propertiesSaver.store(fileHandle, null);
+        FileOutputStream fileHandle;
+        try {
+            fileHandle = new FileOutputStream(Gdx.files.internal("config.cfg").file().getPath());
+            propertiesSaver.store(fileHandle, null);
+            fileHandle.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Gdx.app.log("GameSettings", "FileNotFoundException during writing of gameSettings");
+        } catch (IOException e) {
+            Gdx.app.log("GameSettings", "IO Exception during writing of gameSettings");
+            e.printStackTrace();
+        }
 
-        fileHandle.close();
     }
 
     private static void saveVelocitySettings(GameSettings settings, Properties propertiesSaver) {

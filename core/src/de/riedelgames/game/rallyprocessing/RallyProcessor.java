@@ -8,12 +8,13 @@ import de.riedelgames.onedpong.game.GameStatus;
 
 public interface RallyProcessor {
 
-	/** updates the Rally Processor */
-	public abstract void update(GameStatus gameStatus, float deltaTime);
-	
-	/** returns the status set */
-	public abstract EnumSet<RallyProcessStatus> getRallyProcessStatusSet();
-	
-	/** draws the effects */
-	public abstract void draw(SpriteBatch batch);
+    /** updates the Rally Processor */
+    public void update(GameStatus gameStatus, float deltaTime);
+
+    /** returns the status set */
+    public EnumSet<RallyProcessStatus> getRallyProcessStatusSet();
+
+    /** draws the effects */
+    public void draw(SpriteBatch batch);
+
 }

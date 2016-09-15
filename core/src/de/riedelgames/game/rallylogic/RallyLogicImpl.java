@@ -34,19 +34,10 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
     private double serveStartTime;
     private double serveExecuteTime;
 
-    private static EnumSet<RallyStatus> rallyStatusSet;
+    private EnumSet<RallyStatus> rallyStatusSet;
 
-    private RallyLogicImpl() {
-    };
-
-    public static RallyLogic getInstance() {
-        if (instance == null) {
-            instance = new RallyLogicImpl();
-            rallyStatusSet = EnumSet.noneOf(RallyStatus.class);
-            return instance;
-        } else {
-            return instance;
-        }
+    public RallyLogicImpl() {
+        rallyStatusSet = EnumSet.noneOf(RallyStatus.class);
     }
 
     private void update(float deltaTime) throws RallyException {
@@ -221,18 +212,18 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
 
     @Override
     public void setRallyStatusSet(EnumSet<RallyStatus> rallyStatusSet) {
-        RallyLogicImpl.rallyStatusSet = rallyStatusSet;
+        this.rallyStatusSet = rallyStatusSet;
     }
 
     @Override
     public void addRallyStatus(RallyStatus rallyStatus) {
-        RallyLogicImpl.rallyStatusSet.add(rallyStatus);
+        rallyStatusSet.add(rallyStatus);
 
     }
 
     @Override
     public void removeRallyStatus(RallyStatus rallyStatus) {
-        RallyLogicImpl.rallyStatusSet.remove(rallyStatus);
+        rallyStatusSet.remove(rallyStatus);
 
     }
 

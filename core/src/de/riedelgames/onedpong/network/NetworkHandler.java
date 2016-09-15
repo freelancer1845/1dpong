@@ -1,12 +1,6 @@
 package de.riedelgames.onedpong.network;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +8,6 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.Inputs;
 
 import de.riedelgames.core.networking.api.constants.Keys;
 import de.riedelgames.core.networking.api.server.GameServerWrapper;
@@ -25,6 +18,12 @@ import de.riedelgames.onedpong.game.GameStatus;
 public class NetworkHandler implements Runnable {
 
     private static NetworkHandler instance = null;
+
+    /**
+     * Tracks whether the save is started. This way multiple server instances
+     * are blocked.
+     */
+    private boolean started = false;
 
     /** Underlying server. */
     private GameServerWrapper gameServer;
@@ -43,11 +42,20 @@ public class NetworkHandler implements Runnable {
     }
 
     public void startServer() {
-        this.gameServer.startServer();
+        if (!started) {
+            this.started = this.gameServer.startServer();
+        }
+        if (!started) {
+            Gdx.app.error("Network Error", "Starting server failed.");
+        }
     }
 
     public void stopServer() {
-        this.gameServer.stopServer();
+        if (started) {
+            this.gameServer.stopServer();
+            this.started = false;
+        }
+
     }
 
     @Override

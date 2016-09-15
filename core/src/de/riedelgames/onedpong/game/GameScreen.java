@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import de.riedelgames.game.rallylogic.RallyException;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
 import de.riedelgames.game.rallylogic.RallyLogic;
 import de.riedelgames.game.rallylogic.RallyLogicImpl;
 import de.riedelgames.game.rallylogic.RallyStatus;
@@ -21,7 +23,6 @@ import de.riedelgames.gameobjects.deadline.DeadlineType;
 import de.riedelgames.onedpong.OneDPong;
 import de.riedelgames.onedpong.game.hud.Hud;
 import de.riedelgames.onedpong.game.settings.GameSettings;
-import de.riedelgames.onedpong.network.NetworkHandler;
 import de.riedelgames.onedpong.pregame.StartScreen;
 
 public class GameScreen implements Screen, InputProcessor {
@@ -87,14 +88,23 @@ public class GameScreen implements Screen, InputProcessor {
         this.gameSettings = gameSettings;
         gameStatus.setGameSettings(gameSettings);
         gameStatus.setNetworkGame(networkGame);
-        rallyLogic = RallyLogicImpl.getInstance();
-        rallyProcessor = RallyProcessorImpl.getInstance();
+        rallyLogic = new RallyLogicImpl();
+        rallyProcessor = new RallyProcessorImpl(rallyLogic.getRallyStatusSet());
         hud = new Hud(gameStatus);
         rallyLogic.addRallyStatus(RallyStatus.RALLY_IDELING);
         rallyLogic.addRallyStatus(RallyStatus.NEUTRAL_SERVE);
         rallyLogic.start(100, gameStatus);
         Gdx.input.setInputProcessor(this);
         // NetworkHandler.getInstance().stopServer();
+
+        Timer.schedule(new Task() {
+
+            @Override
+            public void run() {
+                gameStatus.getBall().setVisible(true);
+            }
+
+        }, 1);
 
     }
 
@@ -184,7 +194,7 @@ public class GameScreen implements Screen, InputProcessor {
             }
         }
         if (keycode == Input.Keys.ESCAPE) {
-            Gdx.app.exit();
+            leaveScreen();
             return true;
         }
         return false;
@@ -192,7 +202,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (gameStatus.isNetworkGame()) {
+        if (!gameStatus.isNetworkGame()) {
             if (keycode == Input.Keys.A) {
                 gameStatus.getLeftPlayer().unsetKeyDown();
                 return true;
@@ -238,6 +248,11 @@ public class GameScreen implements Screen, InputProcessor {
     public boolean scrolled(int amount) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    private void leaveScreen() {
+        rallyLogic.dispose();
+        game.setScreen(new StartScreen(game));
     }
 
 }

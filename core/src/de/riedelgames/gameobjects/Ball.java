@@ -23,6 +23,9 @@ public class Ball extends GameObject {
     private float[] particleColor;
     private Random randColor;
 
+    /** State. */
+    private boolean visible = false;
+
     public Ball() {
         super(0, 0, 0, 0);
         width = GameConstants.GAME_WORLD_WIDTH / 35;
@@ -90,8 +93,10 @@ public class Ball extends GameObject {
     }
 
     public void draw(SpriteBatch batch) {
-        sprite.draw(batch);
-        pe.draw(batch);
+        if (visible) {
+            sprite.draw(batch);
+            pe.draw(batch);
+        }
     }
 
     public void dispose() {
@@ -207,6 +212,14 @@ public class Ball extends GameObject {
             ar[index] = ar[i];
             ar[i] = a;
         }
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
 }

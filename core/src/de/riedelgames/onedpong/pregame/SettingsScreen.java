@@ -86,9 +86,9 @@ public class SettingsScreen implements Screen {
 
     private final Map<String, String> settingsMap = new HashMap<String, String>();
 
-    public SettingsScreen(OneDPong game, GameSettings gameSettings) {
+    public SettingsScreen(OneDPong game) {
         this.game = game;
-        this.gameSettings = gameSettings;
+        this.gameSettings = GameSettingsPersistenceHandler.loadSettings();
         getAllSettings();
 
         // background = new Sprite(new Texture("background.png"));
@@ -96,7 +96,7 @@ public class SettingsScreen implements Screen {
         // background.setSize(windowWidth, windowHeight);
 
         stage = new Stage(new ScreenViewport());
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
         Gdx.input.setInputProcessor(stage);
 
         skin = SkinProvider.getSkin();
@@ -433,13 +433,18 @@ public class SettingsScreen implements Screen {
         }
     }
 
+    private GameSettings constructGameSettings() {
+        GameSettings gameSettingsReturn = GameSettingsPersistenceHandler.loadSettings();
+        gameSettingsReturn.setBallStartVelocity(Float.valueOf(settingsMap.get(START_VELOCITY)));
+        gameSettingsReturn.setFullScreenMod(Boolean.valueOf(settingsMap.get(FULL_SCREEN_MOD)));
+        gameSettingsReturn.setHitAreaSize(Float.valueOf(settingsMap.get(HIT_AREA_SIZE)));
+        gameSettingsReturn.setVelocityMod(VelocityMod.valueOf(settingsMap.get(VELOCITY_MOD)));
+        gameSettingsReturn.setPointsToBePlayed(Integer.valueOf(settingsMap.get(POINTS_TO_BE_PLAYED)));
+        return gameSettingsReturn;
+    }
+
     private void writeGameSettings() {
-        gameSettings.setBallStartVelocity(Float.valueOf(settingsMap.get(START_VELOCITY)));
-        gameSettings.setFullScreenMod(Boolean.valueOf(settingsMap.get(FULL_SCREEN_MOD)));
-        gameSettings.setHitAreaSize(Float.valueOf(settingsMap.get(HIT_AREA_SIZE)));
-        gameSettings.setVelocityMod(VelocityMod.valueOf(settingsMap.get(VELOCITY_MOD)));
-        gameSettings.setPointsToBePlayed(Integer.valueOf(settingsMap.get(POINTS_TO_BE_PLAYED)));
-        GameSettingsPersistenceHandler.writeGameSettings(gameSettings);
+        GameSettingsPersistenceHandler.writeGameSettings(constructGameSettings());
     }
 
     private class EndDialog extends Dialog {
@@ -498,7 +503,11 @@ public class SettingsScreen implements Screen {
     }
 
     private boolean checkIfSettingsChanged() {
-        // TODO : To be implemented
+        GameSettings currentSettings = constructGameSettings();
+        GameSettings previousSettings = GameSettingsPersistenceHandler.loadSettings();
+        if (currentSettings.equals(previousSettings)) {
+            return false;
+        }
         return true;
     }
 

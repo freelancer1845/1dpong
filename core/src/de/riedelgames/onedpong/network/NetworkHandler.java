@@ -46,7 +46,7 @@ public class NetworkHandler implements Runnable {
             this.started = this.gameServer.startServer();
         }
         if (!started) {
-            Gdx.app.error("Network Error", "Starting server failed.");
+            Gdx.app.log("Network Error", "Starting server failed.");
         }
     }
 

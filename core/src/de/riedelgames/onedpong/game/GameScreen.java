@@ -96,14 +96,14 @@ public class GameScreen implements Screen, InputProcessor {
         rallyLogic.start(100, gameStatus);
         Gdx.input.setInputProcessor(this);
         // NetworkHandler.getInstance().stopServer();
-
-        Timer.schedule(new Task() {
+        
+        Timer.schedule(new Task(){
 
             @Override
             public void run() {
                 gameStatus.getBall().setVisible(true);
             }
-
+            
         }, 1);
 
     }

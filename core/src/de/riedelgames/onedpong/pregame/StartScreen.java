@@ -46,7 +46,7 @@ public class StartScreen implements Screen, InputProcessor {
     private Table menu;
     private Table connectedClientsTable;
     private List<GuiClient> guiClients;
-    private double updateTimer = -1;
+    private double updateTimer = 0;
 
     public boolean fullScreenMod = false;
     public int windowWidth = 640;
@@ -71,6 +71,7 @@ public class StartScreen implements Screen, InputProcessor {
         windowWidth = gameSettings.getWindowWidth();
         windowHeight = gameSettings.getWindowHeight();
         fullScreenMod = gameSettings.isFullScreenMod();
+        this.show();
 
         background = new Sprite(new Texture("background.png"));
         background.setPosition(0, 0);
@@ -84,7 +85,7 @@ public class StartScreen implements Screen, InputProcessor {
         rootTable.setFillParent(true);
         rootTable.center().top();
         stage.addActor(rootTable);
-        rootTable.setDebug(false);
+        rootTable.setDebug(true);
         stage.addListener(new MenuTraverseListener());
 
         fillTable();
@@ -96,9 +97,12 @@ public class StartScreen implements Screen, InputProcessor {
         headerStyle.background = skin.getDrawable("header");
         Label gameName = new Label("One D Pong", headerStyle);
         gameName.setName("GameName");
-        gameName.setFontScale(0.8f);
+        gameName.setFontScale(Gdx.graphics.getWidth() / 1000.0f);
         gameName.setAlignment(Align.center);
-        rootTable.add(gameName).padTop(25).padBottom(30).width(479).height(78);
+        float heightToWidth = gameName.getHeight() / gameName.getWidth();
+        float width = Gdx.graphics.getWidth() / 1.5f;
+        rootTable.add(gameName).padTop(Gdx.graphics.getHeight() / 40.0f).padBottom(Gdx.graphics.getHeight() / 40.0f)
+                .width(width).height(width * heightToWidth);
         rootTable.row().center();
 
         addMenuEntries();
@@ -111,23 +115,29 @@ public class StartScreen implements Screen, InputProcessor {
         menu.setDebug(false);
         rootTable.add(menu);
 
+        float fontScale = Gdx.graphics.getWidth() / 1000.0f / 1.4f;
+        float width = Gdx.graphics.getWidth() / 3.0f;
+
+        float bottomPad = Gdx.graphics.getHeight() / 20.0f;
+
         TextButton startGame = new TextButton("Start Game", skin);
-        startGame.getLabel().setFontScale(0.6f);
+        startGame.getLabel().setFontScale(fontScale);
         startGame.setChecked(true);
         startGame.setName(BUTTON_IDS[0]);
-        menu.add(startGame).padBottom(20).width(200).height(53);
+        float height = startGame.getLabel().getHeight() / startGame.getLabel().getWidth() * width;
+        menu.add(startGame).padBottom(bottomPad).width(width).height(height);
         menu.row().left();
 
         TextButton settings = new TextButton("Settings", skin);
-        settings.getLabel().setFontScale(0.6f);
+        settings.getLabel().setFontScale(fontScale);
         settings.setName(BUTTON_IDS[1]);
-        menu.add(settings).padBottom(20).width(200).height(53);
+        menu.add(settings).padBottom(bottomPad).width(width).height(height);
         menu.row().left();
 
         TextButton quit = new TextButton("Quit", skin);
-        quit.getLabel().setFontScale(0.6f);
+        quit.getLabel().setFontScale(fontScale);
         quit.setName(BUTTON_IDS[2]);
-        menu.add(quit).width(200).height(53);
+        menu.add(quit).width(width).height(height);
         rootTable.row().left();
     }
 
@@ -135,20 +145,20 @@ public class StartScreen implements Screen, InputProcessor {
         connectedClientsTable = new Table();
         connectedClientsTable.setBackground(skin.getDrawable("connectedPlayersTable"));
         connectedClientsTable.setDebug(false);
-        rootTable.add(connectedClientsTable).padTop(20).padLeft(20).width(500).expandX();
+        float backgroundRatio = connectedClientsTable.getBackground().getTopHeight()
+                / connectedClientsTable.getBackground().getLeftWidth();
+        rootTable.add(connectedClientsTable).width(Gdx.graphics.getWidth() * 2.0f / 3).expandX()
+                .height(Gdx.graphics.getHeight() / 4.0f);
         connectedClientsTable.left().top();
-        Label connectedClientsLabel = new Label("Connected Clients", standardStyle);
-        connectedClientsLabel.setName("connectedClientsLabel");
-        connectedClientsLabel.setFontScale(0.5f);
-        connectedClientsTable.add(connectedClientsLabel).padBottom(10).padLeft(35).padTop(28).left().expandX();
-
         guiClients = new ArrayList<GuiClient>();
-        guiClients.add(new GuiClient("Dummysdssssssssssssssssss", "192.168.2.101"));
-        // guiClients.add(new GuiClient("Dummy2", "192.168.2.102"));
+
     }
 
     private void updateConnectedClientsList() {
         guiClients.clear();
+        // guiClients.add(new GuiClient("Player 1ssssssssssssssssssssssssssss",
+        // "192.168.2.101"));
+        // guiClients.add(new GuiClient("Player 2", "192.168.2.102"));
         for (NetworkServerClient serverClient : networkHandler.getNetworkClients()) {
             guiClients.add(new GuiClient(serverClient.getPlayer().getName(), serverClient.getIp()));
         }
@@ -160,28 +170,32 @@ public class StartScreen implements Screen, InputProcessor {
                 connectedClientsTable.clearChildren();
                 Label connectedClientsLabel = new Label("Connected Clients", standardStyle);
                 connectedClientsLabel.setName("connectedClientsLabel");
-                connectedClientsLabel.setFontScale(0.5f);
-                connectedClientsTable.add(connectedClientsLabel).padBottom(10).padLeft(35).padTop(28).left().expandX();
+                connectedClientsLabel.setFontScale(connectedClientsTable.getHeight() / 300.0f * 1.2f);
+                connectedClientsTable.add(connectedClientsLabel).padBottom(connectedClientsTable.getHeight() / 12.0f)
+                        .padLeft(connectedClientsTable.getWidth() / 14.0f)
+                        .padTop(connectedClientsTable.getHeight() / 4.5f).left().expandX();
                 for (GuiClient guiClient : guiClients) {
                     connectedClientsTable.row().left();
                     Label name = new Label(guiClient.getName(), standardStyle);
-                    name.setFontScale(0.45f);
+                    name.setFontScale(connectedClientsTable.getHeight() / 300.0f * 0.9f);
                     name.setName("guiClient");
-                    if (name.getPrefWidth() > 270) {
+                    if (name.getPrefWidth() > connectedClientsTable.getWidth() / 1.8f) {
                         name.setText(name.getText().substring(0, 25) + "...");
                     }
-                    connectedClientsTable.add(name).left().padLeft(40).padBottom(10);
+                    connectedClientsTable.add(name).left().padLeft(connectedClientsTable.getWidth() / 10.0f)
+                            .padBottom(connectedClientsTable.getHeight() / 8.6f);
                     Label ip = new Label(guiClient.getIp(), standardStyle);
-                    ip.setFontScale(0.45f);
+                    ip.setFontScale(connectedClientsTable.getHeight() / 300.0f * 0.9f);
                     ip.setName("guiClient");
-                    connectedClientsTable.add(ip).padLeft(35).padBottom(10).right().padRight(30);
+                    connectedClientsTable.add(ip).padBottom(connectedClientsTable.getHeight() / 8.6f).right()
+                            .padRight(connectedClientsTable.getWidth() / 13.0f);
                     connectedClientsTable.row().left();
                 }
                 if (connectedClientsTable.getChildren().size / 2 < 2) {
                     connectedClientsTable.row().left();
                     Label noClient = new Label("Waiting for player...", standardStyle);
-                    noClient.setFontScale(0.45f);
-                    connectedClientsTable.add(noClient).padLeft(40).padRight(30);
+                    noClient.setFontScale(connectedClientsTable.getHeight() / 300.0f * 0.9f);
+                    connectedClientsTable.add(noClient).padLeft(connectedClientsTable.getWidth() / 10.0f);
                 }
                 updateTimer = -1;
             }
@@ -200,7 +214,6 @@ public class StartScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         processNetworkInput();
-        updateConnectedClientsList();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -212,12 +225,20 @@ public class StartScreen implements Screen, InputProcessor {
         stage.act(delta);
         stage.draw();
         // draw background
+        updateConnectedClientsList();
 
     }
 
     @Override
     public void resize(int width, int height) {
-        // stage.getViewport().update(width, height);
+        stage.getViewport().update(width, height, true);
+        windowWidth = width;
+        windowHeight = height;
+        rootTable.clear();
+        rootTable.center().top();
+        updateTimer = 0;
+        fillTable();
+
     }
 
     @Override
@@ -326,7 +347,7 @@ public class StartScreen implements Screen, InputProcessor {
                     game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), true));
                 }
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[1]) {
-                game.setScreen(new SettingsScreen(game, GameSettingsPersistenceHandler.loadSettings()));
+                game.setScreen(new SettingsScreen(game));
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[2]) {
                 Gdx.app.exit();
             }

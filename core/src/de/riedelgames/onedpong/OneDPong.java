@@ -3,11 +3,14 @@ package de.riedelgames.onedpong;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.riedelgames.gameobjects.Player;
+import de.riedelgames.onedpong.game.settings.GameSettings;
+import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
 import de.riedelgames.onedpong.network.NetworkHandler;
 import de.riedelgames.onedpong.pregame.StartScreen;
 
@@ -26,11 +29,13 @@ public class OneDPong extends Game {
     @Override
     public void create() {
 
-        // playerList.add(new Player(Input.Keys.A));
-        // playerList.add(new Player(1));
         batch = new SpriteBatch();
-        // this.setScreen(new GameScreen(this,
-        // GameSettingsPersistenceHandler.loadSettings()));
+        GameSettings gameSettings = GameSettingsPersistenceHandler.loadSettings();
+        if (gameSettings.isFullScreenMod()) {
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else {
+            Gdx.graphics.setWindowedMode(gameSettings.getWindowWidth(), gameSettings.getWindowHeight())
+        }
         this.setScreen(new StartScreen(this));
     }
 

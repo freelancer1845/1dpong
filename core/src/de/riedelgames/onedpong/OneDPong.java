@@ -34,7 +34,7 @@ public class OneDPong extends Game {
         if (gameSettings.isFullScreenMod()) {
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         } else {
-            Gdx.graphics.setWindowedMode(gameSettings.getWindowWidth(), gameSettings.getWindowHeight())
+            Gdx.graphics.setWindowedMode(gameSettings.getWindowWidth(), gameSettings.getWindowHeight());
         }
         this.setScreen(new StartScreen(this));
     }

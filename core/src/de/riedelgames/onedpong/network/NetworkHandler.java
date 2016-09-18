@@ -168,7 +168,7 @@ public class NetworkHandler implements Runnable {
         case Keys.KEY_UP:
             return Input.Keys.UP;
         default:
-            return -1;
+            return networkKeyCode;
         }
     }
 

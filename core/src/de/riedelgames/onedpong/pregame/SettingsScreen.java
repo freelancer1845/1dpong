@@ -481,7 +481,7 @@ public class SettingsScreen implements Screen {
 
         @Override
         protected void result(Object object) {
-            if ((boolean) object) {
+            if ((Boolean) object) {
                 leaveSettingsScreen = true;
             } else {
                 leaveSettingsScreen = false;

@@ -149,7 +149,7 @@ public class GameSettingsPersistenceHandler {
             e.printStackTrace();
             Gdx.app.log("GameSettings", "FileNotFoundException during writing of gameSettings");
         } catch (IOException e) {
-            Gdx.app.log("GameSettings", "IO Exception during writing of gameSettings);
+            Gdx.app.log("GameSettings", "IO Exception during writing of gameSettings");
             e.printStackTrace();
         }
 

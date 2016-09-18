@@ -273,7 +273,7 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
 
             ticks++;
             if (System.currentTimeMillis() - tickRateTimer > 1000) {
-                System.out.println("RallyLogic TPS: " + ticks);
+//                System.out.println("RallyLogic TPS: " + ticks);
                 ticks = 0;
                 tickRateTimer = System.currentTimeMillis();
             }

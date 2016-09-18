@@ -24,8 +24,8 @@ public class GameSettings {
     /** VelocityMod Settings */
     private VelocityMod velocityMod;
     private float velocityConstantIncreaseValue;
-    private float velocityParabolicHitpointMax;
-    private float velocityParabolicHitpointMin;
+    private float velocityHitPointMax;
+    private float velocityHitPointMin;
 
     public GameSettings() {
     };
@@ -42,8 +42,8 @@ public class GameSettings {
         velocityConstantIncreaseValue = 0.1f;
         setBallStartVelocity(2.0f);
         setHitAreaSize(0.4f);
-        velocityParabolicHitpointMin = 0.1f;
-        velocityParabolicHitpointMax = 4.5f;
+        velocityHitPointMin = 0.1f;
+        velocityHitPointMax = 4.5f;
 
     }
 
@@ -95,20 +95,20 @@ public class GameSettings {
         this.velocityMod = velocityMod;
     }
 
-    public float getVelocityParabolicHitpointMax() {
-        return velocityParabolicHitpointMax;
+    public float getVelocityHitpointMax() {
+        return velocityHitPointMax;
     }
 
-    public void setVelocityParabolicHitpointMax(float velocityParabolicHitpointMax) {
-        this.velocityParabolicHitpointMax = velocityParabolicHitpointMax;
+    public void setVelocityHitpointMax(float velocityHitpointMax) {
+        this.velocityHitPointMax = velocityHitpointMax;
     }
 
-    public float getVelocityParabolicHitpointMin() {
-        return velocityParabolicHitpointMin;
+    public float getVelocityHitpointMin() {
+        return velocityHitPointMin;
     }
 
-    public void setVelocityParabolicHitpointMin(float velocityParabolicHitpointMin) {
-        this.velocityParabolicHitpointMin = velocityParabolicHitpointMin;
+    public void setVelocityHitpointMin(float velocityHitpointMin) {
+        this.velocityHitPointMin = velocityHitpointMin;
     }
 
     public DeadlineType getDeadlineType() {
@@ -160,8 +160,8 @@ public class GameSettings {
         isEqual &= this.pointsToBePlayed == otherSettings.getPointsToBePlayed();
         isEqual &= this.velocityConstantIncreaseValue == otherSettings.getVelocityConstantIncreaseValue();
         isEqual &= this.velocityMod == otherSettings.getVelocityMod();
-        isEqual &= this.velocityParabolicHitpointMax == otherSettings.getVelocityParabolicHitpointMax();
-        isEqual &= this.velocityParabolicHitpointMin == otherSettings.getVelocityParabolicHitpointMin();
+        isEqual &= this.velocityHitPointMax == otherSettings.getVelocityHitpointMax();
+        isEqual &= this.velocityHitPointMin == otherSettings.getVelocityHitpointMin();
         isEqual &= this.windowHeight == otherSettings.windowHeight;
         isEqual &= this.windowWidth == otherSettings.getWindowWidth();
         

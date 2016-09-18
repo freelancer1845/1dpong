@@ -28,13 +28,13 @@ public class GameSettingsPersistenceHandler {
 
     private static final String VELOCITY_CONSTANT_INCREASE_VALUE = "velocityConstantIncreaseValue";
 
-    private static final String VELOCITY_PARABOLIC_HITPOINT_MIN_DEFAULT = "0.1";
+    private static final String VELOCITY_HITPOINT_MIN_DEFAULT = "0.1";
 
-    private static final String VELOCITY_PARABOLIC_HITPOINT_MIN = "velocityParabolicHitpointMin";
+    private static final String VELOCITY_HITPOINT_MIN = "velocityHitpointMin";
 
-    private static final String VELOCITY_PARABOLIC_HITPOINT_MAX_DEFAULT = "4.5";
+    private static final String VELOCITY_HITPOINT_MAX_DEFAULT = "4.5";
 
-    private static final String VELOCITY_PARABOLIC_HITPOINT_MAX = "velocityParabolicHitpointMax";
+    private static final String VELOCITY_HITPOINT_MAX = "velocityHitpointMax";
 
     private static final String BALL_START_VELOCITY_DEFAULT = "2";
 
@@ -97,10 +97,10 @@ public class GameSettingsPersistenceHandler {
                 VelocityMod.valueOf((propertiesLoader.getProperty(VELOCITY_MOD, VELOCITY_DEFAULT_MOD))));
         settings.setVelocityConstantIncreaseValue(Float.valueOf(propertiesLoader
                 .getProperty(VELOCITY_CONSTANT_INCREASE_VALUE, VELOCITY_CONSTANT_INCREASE_DEFAULT_VALUE)));
-        settings.setVelocityParabolicHitpointMin(Float.valueOf(propertiesLoader
-                .getProperty(VELOCITY_PARABOLIC_HITPOINT_MIN, VELOCITY_PARABOLIC_HITPOINT_MIN_DEFAULT)));
-        settings.setVelocityParabolicHitpointMax(Float.valueOf(propertiesLoader
-                .getProperty(VELOCITY_PARABOLIC_HITPOINT_MAX, VELOCITY_PARABOLIC_HITPOINT_MAX_DEFAULT)));
+        settings.setVelocityHitpointMin(Float.valueOf(propertiesLoader
+                .getProperty(VELOCITY_HITPOINT_MIN, VELOCITY_HITPOINT_MIN_DEFAULT)));
+        settings.setVelocityHitpointMax(Float.valueOf(propertiesLoader
+                .getProperty(VELOCITY_HITPOINT_MAX, VELOCITY_HITPOINT_MAX_DEFAULT)));
         settings.setBallStartVelocity(
                 Float.valueOf(propertiesLoader.getProperty(BALL_START_VELOCITY, BALL_START_VELOCITY_DEFAULT)));
 
@@ -160,10 +160,10 @@ public class GameSettingsPersistenceHandler {
         propertiesSaver.setProperty(VELOCITY_MOD, settings.getVelocityMod().toString());
         propertiesSaver.setProperty(VELOCITY_CONSTANT_INCREASE_VALUE,
                 Float.toString(settings.getVelocityConstantIncreaseValue()));
-        propertiesSaver.setProperty(VELOCITY_PARABOLIC_HITPOINT_MIN,
-                Float.toString(settings.getVelocityParabolicHitpointMin()));
-        propertiesSaver.setProperty(VELOCITY_PARABOLIC_HITPOINT_MAX,
-                Float.toString(settings.getVelocityParabolicHitpointMax()));
+        propertiesSaver.setProperty(VELOCITY_HITPOINT_MIN,
+                Float.toString(settings.getVelocityHitpointMin()));
+        propertiesSaver.setProperty(VELOCITY_HITPOINT_MAX,
+                Float.toString(settings.getVelocityHitpointMax()));
         propertiesSaver.setProperty(BALL_START_VELOCITY, Float.toString(settings.getBallStartVelocity()));
 
     }

@@ -140,7 +140,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         ticks++;
         if (System.currentTimeMillis() - lastTime > 1000) {
-            System.out.println("FPS: " + ticks);
+//            System.out.println("FPS: " + ticks);
             ticks = 0;
             lastTime = System.currentTimeMillis();
         }

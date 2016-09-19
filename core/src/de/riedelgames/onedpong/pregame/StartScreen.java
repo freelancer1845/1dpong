@@ -34,7 +34,8 @@ import de.riedelgames.onedpong.network.NetworkServerClient;
 
 public class StartScreen implements Screen, InputProcessor {
 
-    private static final String[] BUTTON_IDS = { "Button_start_game_id", "Button_settings_id", "Button_quit_id" };
+    private static final String[] BUTTON_IDS =
+            {"Button_start_game_id", "Button_settings_id", "Button_quit_id"};
 
     private final OneDPong game;
     private NetworkHandler networkHandler;
@@ -56,7 +57,9 @@ public class StartScreen implements Screen, InputProcessor {
     private Sprite background;
 
     public static LabelStyle standardStyle = new LabelStyle(
-            new BitmapFont(Gdx.files.getFileHandle("font/square_unique.fnt", Files.FileType.Internal)), Color.WHITE);
+            new BitmapFont(
+                    Gdx.files.getFileHandle("font/square_unique.fnt", Files.FileType.Internal)),
+            Color.WHITE);
 
     /** Font that will be used. */
     private BitmapFont standardFont = SkinProvider.getStandardFont();
@@ -101,8 +104,9 @@ public class StartScreen implements Screen, InputProcessor {
         gameName.setAlignment(Align.center);
         float heightToWidth = gameName.getHeight() / gameName.getWidth();
         float width = Gdx.graphics.getWidth() / 1.5f;
-        rootTable.add(gameName).padTop(Gdx.graphics.getHeight() / 40.0f).padBottom(Gdx.graphics.getHeight() / 40.0f)
-                .width(width).height(width * heightToWidth);
+        rootTable.add(gameName).padTop(Gdx.graphics.getHeight() / 40.0f)
+                .padBottom(Gdx.graphics.getHeight() / 40.0f).width(width)
+                .height(width * heightToWidth);
         rootTable.row().center();
 
         addMenuEntries();
@@ -170,8 +174,10 @@ public class StartScreen implements Screen, InputProcessor {
                 connectedClientsTable.clearChildren();
                 Label connectedClientsLabel = new Label("Connected Clients", standardStyle);
                 connectedClientsLabel.setName("connectedClientsLabel");
-                connectedClientsLabel.setFontScale(connectedClientsTable.getHeight() / 300.0f * 1.2f);
-                connectedClientsTable.add(connectedClientsLabel).padBottom(connectedClientsTable.getHeight() / 12.0f)
+                connectedClientsLabel
+                        .setFontScale(connectedClientsTable.getHeight() / 300.0f * 1.2f);
+                connectedClientsTable.add(connectedClientsLabel)
+                        .padBottom(connectedClientsTable.getHeight() / 12.0f)
                         .padLeft(connectedClientsTable.getWidth() / 14.0f)
                         .padTop(connectedClientsTable.getHeight() / 4.5f).left().expandX();
                 for (GuiClient guiClient : guiClients) {
@@ -182,12 +188,14 @@ public class StartScreen implements Screen, InputProcessor {
                     if (name.getPrefWidth() > connectedClientsTable.getWidth() / 1.8f) {
                         name.setText(name.getText().substring(0, 25) + "...");
                     }
-                    connectedClientsTable.add(name).left().padLeft(connectedClientsTable.getWidth() / 10.0f)
+                    connectedClientsTable.add(name).left()
+                            .padLeft(connectedClientsTable.getWidth() / 10.0f)
                             .padBottom(connectedClientsTable.getHeight() / 8.6f);
                     Label ip = new Label(guiClient.getIp(), standardStyle);
                     ip.setFontScale(connectedClientsTable.getHeight() / 300.0f * 0.9f);
                     ip.setName("guiClient");
-                    connectedClientsTable.add(ip).padBottom(connectedClientsTable.getHeight() / 8.6f).right()
+                    connectedClientsTable.add(ip)
+                            .padBottom(connectedClientsTable.getHeight() / 8.6f).right()
                             .padRight(connectedClientsTable.getWidth() / 13.0f);
                     connectedClientsTable.row().left();
                 }
@@ -195,7 +203,8 @@ public class StartScreen implements Screen, InputProcessor {
                     connectedClientsTable.row().left();
                     Label noClient = new Label("Waiting for player...", standardStyle);
                     noClient.setFontScale(connectedClientsTable.getHeight() / 300.0f * 0.9f);
-                    connectedClientsTable.add(noClient).padLeft(connectedClientsTable.getWidth() / 10.0f);
+                    connectedClientsTable.add(noClient)
+                            .padLeft(connectedClientsTable.getWidth() / 10.0f);
                 }
                 updateTimer = -1;
             }
@@ -334,7 +343,8 @@ public class StartScreen implements Screen, InputProcessor {
         private void handleEnter() {
             if (BUTTON_IDS[activeButton] == BUTTON_IDS[0]) {
                 if (guiClients.size() == 0) {
-                    game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), false));
+                    game.setScreen(new GameScreen(game,
+                            GameSettingsPersistenceHandler.loadSettings(), false));
                 }
                 // if (guiClients.size() > 1) {
                 // game.setScreen(new GameScreen(game,
@@ -344,7 +354,8 @@ public class StartScreen implements Screen, InputProcessor {
                 // GameSettingsPersistenceHandler.loadSettings(), false));
                 // }
                 if (guiClients.size() == 2) {
-                    game.setScreen(new GameScreen(game, GameSettingsPersistenceHandler.loadSettings(), true));
+                    game.setScreen(new GameScreen(game,
+                            GameSettingsPersistenceHandler.loadSettings(), true));
                 }
             } else if (BUTTON_IDS[activeButton] == BUTTON_IDS[1]) {
                 game.setScreen(new SettingsScreen(game));

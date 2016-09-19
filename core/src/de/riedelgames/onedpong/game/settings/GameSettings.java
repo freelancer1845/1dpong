@@ -1,50 +1,31 @@
 package de.riedelgames.onedpong.game.settings;
 
-import java.lang.reflect.Field;
-
 import de.riedelgames.gameobjects.deadline.DeadlineType;
 import de.riedelgames.onedpong.game.velocity.VelocityMod;
 
 public class GameSettings {
 
-    /** Window Settings */
+    /** Window Settings. */
     private int windowWidth;
     private int windowHeight;
     private boolean fullScreenMod;
 
-    /** Game Settings */
+    /** Game Settings. */
     private int pointsToBePlayed;
     private float ballStartVelocity;
 
-    /** Deadline Settings */
+    /** Deadline Settings. */
     private DeadlineType deadlineType;
     private float deadlineConstantDecreaseValue;
     private float hitAreaSize;
 
-    /** VelocityMod Settings */
+    /** VelocityMod Settings. */
     private VelocityMod velocityMod;
     private float velocityConstantIncreaseValue;
     private float velocityHitPointMax;
     private float velocityHitPointMin;
 
     public GameSettings() {
-    };
-
-    /** dummy game settings */
-    public GameSettings(int i) {
-        setWindowWidth(640);
-        setWindowHeight(480);
-        setFullScreenMod(false);
-        setPointsToBePlayed(5);
-        setDeadlineType(DeadlineType.constantDecrease);
-        velocityMod = VelocityMod.Increase;
-        setDeadlineConstantDecreaseValue(0.01f);
-        velocityConstantIncreaseValue = 0.1f;
-        setBallStartVelocity(2.0f);
-        setHitAreaSize(0.4f);
-        velocityHitPointMin = 0.1f;
-        velocityHitPointMax = 4.5f;
-
     }
 
     public int getWindowWidth() {
@@ -145,13 +126,19 @@ public class GameSettings {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (!(obj instanceof GameSettings)) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof GameSettings)) {
+            return false;
+        }
         GameSettings otherSettings = (GameSettings) obj;
-        
+
         boolean isEqual = true;
-        
+
         isEqual &= this.fullScreenMod == otherSettings.isFullScreenMod();
         isEqual &= this.ballStartVelocity == otherSettings.getBallStartVelocity();
         isEqual &= this.deadlineConstantDecreaseValue == otherSettings.getDeadlineConstantDecreaseValue();
@@ -164,7 +151,7 @@ public class GameSettings {
         isEqual &= this.velocityHitPointMin == otherSettings.getVelocityHitpointMin();
         isEqual &= this.windowHeight == otherSettings.windowHeight;
         isEqual &= this.windowWidth == otherSettings.getWindowWidth();
-        
+
         return isEqual;
     }
 

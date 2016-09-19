@@ -30,6 +30,7 @@ import de.riedelgames.onedpong.OneDPong;
 import de.riedelgames.onedpong.game.settings.GameSettings;
 import de.riedelgames.onedpong.game.settings.GameSettingsPersistenceHandler;
 import de.riedelgames.onedpong.game.velocity.VelocityMod;
+import de.riedelgames.onedpong.network.NetworkHandler;
 
 public class SettingsScreen implements Screen {
 
@@ -215,7 +216,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        NetworkHandler.getInstance().fireKeyEvents(stage);
         updateButtons();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -276,7 +277,7 @@ public class SettingsScreen implements Screen {
 
         /** The end Dialog. */
         // TODO : create dialog here
-        private EndDialog dialog = new EndDialog("Save settings...", skin, "endDialog");;
+        private EndDialog dialog = new EndDialog("Save settings...", skin, "endDialog");
 
         @Override
         public boolean keyDown(InputEvent event, int keycode) {

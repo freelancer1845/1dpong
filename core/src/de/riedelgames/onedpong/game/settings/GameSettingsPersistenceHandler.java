@@ -12,7 +12,6 @@ import de.riedelgames.gameobjects.deadline.DeadlineType;
 import de.riedelgames.onedpong.game.velocity.VelocityMod;
 
 /**
- * 
  * Static class that exchanges settings with the file system.
  * 
  * @author freeskier
@@ -68,9 +67,13 @@ public class GameSettingsPersistenceHandler {
 
     private static final String POINTS_TO_BE_PLAYED = "pointsToBePlayed";
 
-    private GameSettingsPersistenceHandler() {
-    }
+    private GameSettingsPersistenceHandler() {}
 
+    /**
+     * Loads the GameSettings from file "config.cfg".
+     * 
+     * @return {@link GameSettings} as ready to use.
+     */
     public static GameSettings loadSettings() {
         GameSettings gameSettings = new GameSettings();
         FileHandle settingsFile = Gdx.files.internal("config.cfg");
@@ -93,45 +96,53 @@ public class GameSettingsPersistenceHandler {
 
     private static void loadVelocitySettings(GameSettings settings, Properties propertiesLoader) {
 
-        settings.setVelocityMod(
-                VelocityMod.valueOf((propertiesLoader.getProperty(VELOCITY_MOD, VELOCITY_DEFAULT_MOD))));
-        settings.setVelocityConstantIncreaseValue(Float.valueOf(propertiesLoader
-                .getProperty(VELOCITY_CONSTANT_INCREASE_VALUE, VELOCITY_CONSTANT_INCREASE_DEFAULT_VALUE)));
+        settings.setVelocityMod(VelocityMod
+                .valueOf((propertiesLoader.getProperty(VELOCITY_MOD, VELOCITY_DEFAULT_MOD))));
+        settings.setVelocityConstantIncreaseValue(Float.valueOf(propertiesLoader.getProperty(
+                VELOCITY_CONSTANT_INCREASE_VALUE, VELOCITY_CONSTANT_INCREASE_DEFAULT_VALUE)));
         settings.setVelocityHitpointMin(Float.valueOf(propertiesLoader
                 .getProperty(VELOCITY_HITPOINT_MIN, VELOCITY_HITPOINT_MIN_DEFAULT)));
         settings.setVelocityHitpointMax(Float.valueOf(propertiesLoader
                 .getProperty(VELOCITY_HITPOINT_MAX, VELOCITY_HITPOINT_MAX_DEFAULT)));
-        settings.setBallStartVelocity(
-                Float.valueOf(propertiesLoader.getProperty(BALL_START_VELOCITY, BALL_START_VELOCITY_DEFAULT)));
+        settings.setBallStartVelocity(Float.valueOf(
+                propertiesLoader.getProperty(BALL_START_VELOCITY, BALL_START_VELOCITY_DEFAULT)));
 
     }
 
     private static void loadDeadlineSettings(GameSettings settings, Properties propertiesLoader) {
 
-        settings.setDeadlineType(
-                DeadlineType.valueOf(propertiesLoader.getProperty(DEADLINE_TYPE, DEADLINE_DEFAULT_TYPE)));
-        settings.setDeadlineConstantDecreaseValue(Float.valueOf(propertiesLoader
-                .getProperty(DEADLINE_CONSTANT_DECREASE_VALUE, DEADLINE_CONSTANT_DECREASE_DEFAULT_VALUE)));
-        settings.setHitAreaSize(Float.valueOf(propertiesLoader.getProperty(HIT_AREA_SIZE, HIT_AREA_SIZE_DEFAULT)));
+        settings.setDeadlineType(DeadlineType
+                .valueOf(propertiesLoader.getProperty(DEADLINE_TYPE, DEADLINE_DEFAULT_TYPE)));
+        settings.setDeadlineConstantDecreaseValue(Float.valueOf(propertiesLoader.getProperty(
+                DEADLINE_CONSTANT_DECREASE_VALUE, DEADLINE_CONSTANT_DECREASE_DEFAULT_VALUE)));
+        settings.setHitAreaSize(
+                Float.valueOf(propertiesLoader.getProperty(HIT_AREA_SIZE, HIT_AREA_SIZE_DEFAULT)));
 
     }
 
     private static void loadRulesSettings(GameSettings settings, Properties propertiesLoader) {
 
-        settings.setPointsToBePlayed(
-                Integer.valueOf(propertiesLoader.getProperty(POINTS_TO_BE_PLAYED, POINTS_TO_BE_PLAYED_DEFAULT)));
+        settings.setPointsToBePlayed(Integer.valueOf(
+                propertiesLoader.getProperty(POINTS_TO_BE_PLAYED, POINTS_TO_BE_PLAYED_DEFAULT)));
 
     }
 
     private static void loadScreenSettings(GameSettings settings, Properties propertiesLoader) {
 
-        settings.setWindowWidth(Integer.valueOf(propertiesLoader.getProperty(WINDOW_WIDTH, WINDOW_WIDTH_DEFAULT)));
-        settings.setWindowHeight(Integer.valueOf(propertiesLoader.getProperty(WINDOW_HEIGHT, WINDOW_HEIGHT_DEFAULT)));
-        settings.setFullScreenMod(
-                Boolean.valueOf(propertiesLoader.getProperty(RUN_IN_FULLSCREEN, RUN_IN_FULLSCREEN_DEFAULT)));
+        settings.setWindowWidth(
+                Integer.valueOf(propertiesLoader.getProperty(WINDOW_WIDTH, WINDOW_WIDTH_DEFAULT)));
+        settings.setWindowHeight(Integer
+                .valueOf(propertiesLoader.getProperty(WINDOW_HEIGHT, WINDOW_HEIGHT_DEFAULT)));
+        settings.setFullScreenMod(Boolean.valueOf(
+                propertiesLoader.getProperty(RUN_IN_FULLSCREEN, RUN_IN_FULLSCREEN_DEFAULT)));
 
     }
 
+    /**
+     * Writes the given set of {@link GameSettings} to the file "config.cfg".
+     * 
+     * @param settings to write
+     */
     public static void writeGameSettings(GameSettings settings) {
 
         Properties propertiesSaver = new Properties();
@@ -164,7 +175,8 @@ public class GameSettingsPersistenceHandler {
                 Float.toString(settings.getVelocityHitpointMin()));
         propertiesSaver.setProperty(VELOCITY_HITPOINT_MAX,
                 Float.toString(settings.getVelocityHitpointMax()));
-        propertiesSaver.setProperty(BALL_START_VELOCITY, Float.toString(settings.getBallStartVelocity()));
+        propertiesSaver.setProperty(BALL_START_VELOCITY,
+                Float.toString(settings.getBallStartVelocity()));
 
     }
 
@@ -179,7 +191,8 @@ public class GameSettingsPersistenceHandler {
 
     private static void saveRulesSettings(GameSettings settings, Properties propertiesSaver) {
 
-        propertiesSaver.setProperty(POINTS_TO_BE_PLAYED, Integer.toString(settings.getPointsToBePlayed()));
+        propertiesSaver.setProperty(POINTS_TO_BE_PLAYED,
+                Integer.toString(settings.getPointsToBePlayed()));
 
     }
 
@@ -187,7 +200,8 @@ public class GameSettingsPersistenceHandler {
 
         propertiesSaver.setProperty(WINDOW_WIDTH, Integer.toString(settings.getWindowWidth()));
         propertiesSaver.setProperty(WINDOW_HEIGHT, Integer.toString(settings.getWindowHeight()));
-        propertiesSaver.setProperty(RUN_IN_FULLSCREEN, Boolean.toString(settings.isFullScreenMod()));
+        propertiesSaver.setProperty(RUN_IN_FULLSCREEN,
+                Boolean.toString(settings.isFullScreenMod()));
 
     }
 }

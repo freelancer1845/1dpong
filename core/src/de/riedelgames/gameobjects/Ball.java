@@ -16,7 +16,8 @@ import de.riedelgames.onedpong.game.GameConstants;
 public class Ball extends GameObject {
 
     private Sprite sprite;
-    private float width, height;
+    private float width;
+    private float height;
 
     private ParticleEffect pe;
     private ParticleEmitter firstParticleEmitter;
@@ -34,13 +35,13 @@ public class Ball extends GameObject {
         sprite = new Sprite(new Texture("lightcircle.png"));
 
         sprite.setSize(width, height);
-        sprite.setPosition(x, y);
+        sprite.setPosition(posX, posY);
         sprite.setColor(new Color(0.6f, 0.6f, 1f, 1));
 
         pe = new ParticleEffect();
         pe.load(Gdx.files.internal("Ball.party"), Gdx.files.internal(""));
         firstParticleEmitter = pe.getEmitters().first();
-        firstParticleEmitter.setPosition(x, y);
+        firstParticleEmitter.setPosition(posX, posY);
         firstParticleEmitter.setContinuous(true);
         particleColor = new float[] { 0.000f, 0.749f, 1.000f };
         randColor = new Random();
@@ -73,21 +74,21 @@ public class Ball extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(posX, posY, width, height);
     }
 
     public void update(float deltaTime) {
 
-        this.x += velX * deltaTime;
-        this.y += velY * deltaTime;
+        this.posX += velX * deltaTime;
+        this.posY += velY * deltaTime;
 
         if (checkForMapEnd()) {
             // clampToWorld();
             sprite.setColor(1, 0.6f, 0.6f, 1);
         }
 
-        sprite.setPosition(x, y);
-        firstParticleEmitter.setPosition(x + width / 2, y + height / 2);
+        sprite.setPosition(posX, posY);
+        firstParticleEmitter.setPosition(posX + width / 2, posY + height / 2);
         pe.update(deltaTime);
 
     }
@@ -131,22 +132,22 @@ public class Ball extends GameObject {
     }
 
     public void setPosition(float x, float y) {
-        this.x = x;
-        this.y = y;
+        this.posX = x;
+        this.posY = y;
     }
 
     private boolean checkForMapEnd() {
-        if (this.x > GameConstants.GAME_WORLD_WIDTH) {
+        if (this.posX > GameConstants.GAME_WORLD_WIDTH) {
             // x = GameScreen.GAME_WORLD_WIDTH;
             return true;
-        } else if (this.x < -sprite.getWidth()) {
+        } else if (this.posX < -sprite.getWidth()) {
             // x = sprite.getWidth();
             return true;
-        } else if (this.y < 0 || this.y > GameConstants.GAME_WORLD_HEIGHT - sprite.getHeight()) {
-            y = GameConstants.GAME_WORLD_HEIGHT - sprite.getHeight();
+        } else if (this.posY < 0 || this.posY > GameConstants.GAME_WORLD_HEIGHT - sprite.getHeight()) {
+            posY = GameConstants.GAME_WORLD_HEIGHT - sprite.getHeight();
             return true;
-        } else if (this.y < 0) {
-            y = 0;
+        } else if (this.posY < 0) {
+            posY = 0;
             return true;
         } else {
             return false;
@@ -154,14 +155,14 @@ public class Ball extends GameObject {
     }
 
     private void clampToWorld() {
-        if (this.x > GameConstants.GAME_WORLD_WIDTH) {
-            x = GameConstants.GAME_WORLD_WIDTH;
-        } else if (this.x + sprite.getWidth() < 0) {
-            x = -sprite.getWidth();
-        } else if (this.y < 0 || this.y > GameConstants.GAME_WORLD_HEIGHT + sprite.getHeight()) {
-            y = GameConstants.GAME_WORLD_HEIGHT + sprite.getHeight();
-        } else if (this.y < 0) {
-            y = 0;
+        if (this.posX > GameConstants.GAME_WORLD_WIDTH) {
+            posX = GameConstants.GAME_WORLD_WIDTH;
+        } else if (this.posX + sprite.getWidth() < 0) {
+            posX = -sprite.getWidth();
+        } else if (this.posY < 0 || this.posY > GameConstants.GAME_WORLD_HEIGHT + sprite.getHeight()) {
+            posY = GameConstants.GAME_WORLD_HEIGHT + sprite.getHeight();
+        } else if (this.posY < 0) {
+            posY = 0;
         } else {
         }
     }

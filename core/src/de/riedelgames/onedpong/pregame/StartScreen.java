@@ -116,15 +116,15 @@ public class StartScreen implements Screen, InputProcessor {
         rootTable.add(menu);
 
         float fontScale = Gdx.graphics.getWidth() / 1000.0f / 1.4f;
-        float width = Gdx.graphics.getWidth() / 3.0f;
-
-        float bottomPad = Gdx.graphics.getHeight() / 20.0f;
 
         TextButton startGame = new TextButton("Start Game", skin);
         startGame.getLabel().setFontScale(fontScale);
         startGame.setChecked(true);
         startGame.setName(BUTTON_IDS[0]);
+        float width = Gdx.graphics.getWidth() / 3.0f;
+        float bottomPad = Gdx.graphics.getHeight() / 20.0f;
         float height = startGame.getLabel().getHeight() / startGame.getLabel().getWidth() * width;
+
         menu.add(startGame).padBottom(bottomPad).width(width).height(height);
         menu.row().left();
 

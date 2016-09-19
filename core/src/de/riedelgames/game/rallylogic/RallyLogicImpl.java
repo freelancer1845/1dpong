@@ -29,7 +29,7 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
     /** The GameStatus reference that will be updated. */
     private GameStatus gameStatus;
 
-    /** neutral server needed variables */
+    /** neutral server needed variables. */
     private boolean serveStarted = false;
     private double serveStartTime;
     private double serveExecuteTime;
@@ -65,8 +65,9 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
     private void rallyRunningLogic(GameStatus gameStatus, float deltaTime) {
         if (checkForPlayerInput(gameStatus)) {
             handlePlayerHitMistakes(gameStatus);
-            if (!isRallyRunning())
+            if (!isRallyRunning()) {
                 return;
+            }
             if (acceptInput(gameStatus)) {
                 VelocityLogic.update(gameStatus, deltaTime);
             }
@@ -85,7 +86,7 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
     }
 
     private void handlePlayerHitMistakes(GameStatus gameStatus) {
-        /** left Player */
+        // Left Player
         if (gameStatus.getBall().getVelX() < 0) {
             if (gameStatus.getLeftPlayer().isKeyDown()
                     && gameStatus.getBall().getX() > gameStatus.getLeftDeadline().getX()) {
@@ -93,9 +94,7 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
                 rallyStatusSet.add(RallyStatus.RALLY_STOPPED);
                 rallyStatusSet.remove(RallyStatus.RALLY_RUNNING);
             }
-        }
-        /** right Player */
-        else {
+        } else { // Right Player
             if (gameStatus.getRightPlayer().isKeyDown() && gameStatus.getBall().getX()
                     + gameStatus.getBall().getWidth() < gameStatus.getRightDeadline().getX()) {
                 rallyStatusSet.add(RallyStatus.LEFT_PLAYER_WON);
@@ -158,11 +157,13 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
             if (currentTime - serveStartTime > 2) {
                 if (player.isKeyDown()) {
                     if (rallyStatusSet.contains(RallyStatus.LEFT_PLAYER_SERVE)) {
-                        gameStatus.getBall().setVelX(gameStatus.getGameSettings().getBallStartVelocity());
+                        gameStatus.getBall()
+                                .setVelX(gameStatus.getGameSettings().getBallStartVelocity());
                         rallyStatusSet.remove(RallyStatus.LEFT_PLAYER_SERVE);
 
                     } else {
-                        gameStatus.getBall().setVelX(-gameStatus.getGameSettings().getBallStartVelocity());
+                        gameStatus.getBall()
+                                .setVelX(-gameStatus.getGameSettings().getBallStartVelocity());
                         rallyStatusSet.remove(RallyStatus.RIGHT_PLAYER_SERVE);
                     }
                     rallyStatusSet.remove(RallyStatus.RALLY_IDELING);
@@ -187,9 +188,11 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
             if (currentTime > serveExecuteTime) {
                 Random rand = new Random();
                 if (rand.nextBoolean()) {
-                    gameStatus.getBall().setVelX(gameStatus.getGameSettings().getBallStartVelocity());
+                    gameStatus.getBall()
+                            .setVelX(gameStatus.getGameSettings().getBallStartVelocity());
                 } else {
-                    gameStatus.getBall().setVelX(-gameStatus.getGameSettings().getBallStartVelocity());
+                    gameStatus.getBall()
+                            .setVelX(-gameStatus.getGameSettings().getBallStartVelocity());
                 }
                 serveStarted = false;
                 rallyStatusSet.remove(RallyStatus.NEUTRAL_SERVE);
@@ -243,6 +246,7 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
         }
     }
 
+
     @Override
     public void run() {
         long tickRateTimer = System.currentTimeMillis();
@@ -251,19 +255,20 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
             long now = System.currentTimeMillis();
             try {
                 update(1.0f / tickrate);
-            } catch (RallyException e) {
-                Gdx.app.log("RallyException", e.getMessage());
-                e.printStackTrace();
+            } catch (RallyException exception) {
+                Gdx.app.log("RallyException", exception.getMessage());
+                exception.printStackTrace();
             }
             long delta = System.currentTimeMillis() - now;
             long sleepTime = (long) ((1.0f / tickrate) * 1000 - delta);
             if (sleepTime > 0) {
                 try {
                     Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException exception) {
+                    exception.printStackTrace();
                 }
             }
+
 
             // if (tickrate > 0) {
             // while ((System.nanoTime() - now) < 1000000000 * 1 / tickrate) {
@@ -273,7 +278,7 @@ public class RallyLogicImpl implements RallyLogic, Runnable {
 
             ticks++;
             if (System.currentTimeMillis() - tickRateTimer > 1000) {
-//                System.out.println("RallyLogic TPS: " + ticks);
+                // System.out.println("RallyLogic TPS: " + ticks);
                 ticks = 0;
                 tickRateTimer = System.currentTimeMillis();
             }
